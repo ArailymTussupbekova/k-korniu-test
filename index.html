@@ -708,7 +708,6 @@ h1 em{
       <h3 id="ctaTitle">Пора разобраться до конца</h3>
       <p id="ctaP">Тест показывает направление — глубинная проработка происходит на консультации. Запишитесь, чтобы снять этот паттерн, а не просто узнать о нём.</p>
       <button class="cta-btn" id="ctaBook">Отправить эксперту и записаться</button>
-      <button class="cta-btn secondary" id="ctaShare">Сохранить результат себе</button>
     </div>
     <div class="restart" id="restartLink">Пройти тест по другой теме</div>
   </section>
@@ -746,7 +745,6 @@ const STRINGS = {
     ctaTitle: 'Пора разобраться до конца',
     ctaP: 'Тест показывает направление — глубинная проработка происходит на консультации. Запишитесь, чтобы снять этот паттерн, а не просто узнать о нём.',
     ctaBookBtnText: 'Отправить эксперту и записаться',
-    ctaShareBtnText: 'Сохранить результат себе',
     restartLinkText: 'Пройти тест по другой теме',
 
     problemPrompts: {
@@ -769,13 +767,7 @@ const STRINGS = {
     legendPrimary: 'сильнее',
     legendSecondary: 'слабее',
 
-    attached: 'приложено', notAttached: 'нет',
-    shareRequestTitle: 'Заявка на консультацию',
-    shareText: (cat,title,name,phone,problem,duration,situation,emotions)=> `Заявка с теста «К Корню»\n\nТема: ${cat}\nРезультат: ${title}\nИмя: ${name}\nТелефон: ${phone}\n\nОписание проблемы: ${problem || '—'}\nДлится: ${duration || '—'}\nСитуация: ${situation || '—'}\nЭмоции: ${emotions || '—'}`,
-    alertClipboard: 'Заявка скопирована в буфер обмена. Отправьте её эксперту в Telegram/WhatsApp вместе с фото.\n\nДля продакшена: подключите сюда CRM, Telegram-бота или email-сервис, чтобы заявка (включая фото) уходила автоматически — сейчас это заглушка.',
-    shareResultTitle: 'К Корню',
-    shareResultText: (title, body)=> `Мой результат теста «К Корню»: ${title}\n\n${body}`,
-    alertClipboardResult: 'Результат скопирован в буфер обмена.'
+    shareText: (cat,title,name,phone,problem,duration,situation,emotions)=> `Заявка с теста «К Корню»\n\nТема: ${cat}\nРезультат: ${title}\nИмя: ${name}\nТелефон: ${phone}\n\nОписание проблемы: ${problem || '—'}\nДлится: ${duration || '—'}\nСитуация: ${situation || '—'}\nЭмоции: ${emotions || '—'}`
   },
   kk: {
     aboutTitle: 'Тест туралы',
@@ -805,7 +797,6 @@ const STRINGS = {
     ctaTitle: 'Соңына дейін түсінудің уақыты келді',
     ctaP: 'Тест бағытты көрсетеді — терең жұмыс консультацияда өтеді. Бұл үлгіні тек біліп қана қоймай, алып тастау үшін жазылыңыз.',
     ctaBookBtnText: 'Маманға жіберу және жазылу',
-    ctaShareBtnText: 'Нәтижені өзіме сақтау',
     restartLinkText: 'Басқа тақырып бойынша тестті қайта өту',
 
     problemPrompts: {
@@ -828,13 +819,7 @@ const STRINGS = {
     legendPrimary: 'күштірек',
     legendSecondary: 'әлсіздеу',
 
-    attached: 'қоса берілді', notAttached: 'жоқ',
-    shareRequestTitle: 'Консультацияға өтінім',
-    shareText: (cat,title,name,phone,problem,duration,situation,emotions)=> `«Түбірге» тестінің өтінімі\n\nТақырып: ${cat}\nНәтиже: ${title}\nАты-жөні: ${name}\nТелефон: ${phone}\n\nМәселенің сипаттамасы: ${problem || '—'}\nҚанша уақыттан бері: ${duration || '—'}\nЖағдай: ${situation || '—'}\nЭмоциялар: ${emotions || '—'}`,
-    alertClipboard: 'Өтінім алмасу буферіне көшірілді. Оны маманға Telegram/WhatsApp арқылы фотосуреттермен бірге жіберіңіз.\n\nӨндірістік нұсқа үшін: өтінім (фотосуреттермен қоса) автоматты түрде түсуі үшін осында CRM, Telegram-бот немесе email-қызметін қосыңыз — қазір бұл алдын ала үлгі ғана.',
-    shareResultTitle: 'Түбірге',
-    shareResultText: (title, body)=> `«Түбірге» тестінің нәтижем: ${title}\n\n${body}`,
-    alertClipboardResult: 'Нәтиже алмасу буферіне көшірілді.'
+    shareText: (cat,title,name,phone,problem,duration,situation,emotions)=> `«Түбірге» тестінің өтінімі\n\nТақырып: ${cat}\nНәтиже: ${title}\nАты-жөні: ${name}\nТелефон: ${phone}\n\nМәселенің сипаттамасы: ${problem || '—'}\nҚанша уақыттан бері: ${duration || '—'}\nЖағдай: ${situation || '—'}\nЭмоциялар: ${emotions || '—'}`
   }
 };
 
@@ -1139,7 +1124,6 @@ function applyLang(lang){
   document.getElementById('ctaTitle').textContent = t.ctaTitle;
   document.getElementById('ctaP').textContent = t.ctaP;
   document.getElementById('ctaBook').textContent = t.ctaBookBtnText;
-  document.getElementById('ctaShare').textContent = t.ctaShareBtnText;
   document.getElementById('restartLink').textContent = t.restartLinkText;
 
   document.documentElement.lang = lang;
@@ -1187,7 +1171,8 @@ document.querySelectorAll('.cat-card[data-cat]').forEach(card=>{
 document.getElementById('backLink').addEventListener('click', goIntro);
 document.getElementById('restartLink').addEventListener('click', goIntro);
 
-/* --- final CTA: send everything to the expert --- */
+/* --- final CTA: send everything to the expert via WhatsApp --- */
+const WHATSAPP_LINK = 'https://wa.me/message/IM3FMV73QBLRL1';
 document.getElementById('ctaBook').addEventListener('click', ()=>{
   const t = STRINGS[LANG];
   const title = document.getElementById('resultTitle').textContent;
@@ -1197,25 +1182,7 @@ document.getElementById('ctaBook').addEventListener('click', ()=>{
     catLabel, title, contact.name, contact.phone,
     freeform.problemText, freeform.duration, freeform.situationText, emotionsText
   );
-
-  if(navigator.share){
-    navigator.share({ title:t.shareRequestTitle, text }).catch(()=>{});
-  } else {
-    navigator.clipboard?.writeText(text);
-    alert(t.alertClipboard);
-  }
-});
-document.getElementById('ctaShare').addEventListener('click', ()=>{
-  const t = STRINGS[LANG];
-  const title = document.getElementById('resultTitle').textContent;
-  const body = document.getElementById('resultBody').textContent;
-  const text = t.shareResultText(title, body);
-  if(navigator.share){
-    navigator.share({title:t.shareResultTitle, text}).catch(()=>{});
-  } else {
-    navigator.clipboard?.writeText(text);
-    alert(t.alertClipboardResult);
-  }
+  window.open(WHATSAPP_LINK + '?text=' + encodeURIComponent(text), '_blank');
 });
 
 function goIntro(){
