@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Тест «К Корню» / «Түбірге» тесті</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg-0:#FAF8F4;
+  --bg-1:#FFFFFF;
+  --bg-2:#F1EEE6;
+  --line:#DCD6C9;
+  --text:#26291F;
+  --text-dim:#5B6354;
+  --gold:#4B6B4F;
+  --gold-dim:#9DB8A0;
+  --money:#4B6B4F;
+  --rel:#A15C74;
+  --health:#3C6E78;
+  --radius:18px;
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{
+  color:var(--text);
+  font-family:'Manrope', sans-serif;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  -webkit-font-smoothing:antialiased;
+  background:var(--bg-0);
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+}
+
+#app{
+  width:100%;
+  max-width:480px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  background:
+    radial-gradient(ellipse 700px 500px at 50% -10%, rgba(75,107,79,0.07), transparent 60%),
+    var(--bg-0);
+  color:var(--text);
+}
+
+.screen{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:28px 22px 40px;
+  animation:fadeIn .5s ease;
+}
+@keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:14px;
+}
+
+h1{
+  font-family:'Fraunces', serif;
+  font-weight:500;
+  font-size:34px;
+  line-height:1.15;
+  letter-spacing:-.01em;
+  margin-bottom:14px;
+}
+h1 em{
+  font-style:italic;
+  color:var(--gold);
+}
+
+.lede{
+  color:var(--text-dim);
+  font-size:15.5px;
+  line-height:1.6;
+  margin-bottom:30px;
+}
+
+/* --- language screen --- */
+.lang-logo{
+  width:96px; height:96px;
+  border-radius:50%;
+  overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  font-size:36px;
+  margin:10px auto 26px;
+  box-shadow:0 0 0 3px var(--bg-1), 0 0 0 4px var(--line), 0 12px 30px rgba(75,107,79,.18);
+}
+.lang-logo img{
+  width:100%; height:100%;
+  object-fit:cover;
+  display:block;
+}
+.lang-center{text-align:center;}
+.lang-card .cat-icon{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12.5px;
+  font-weight:700;
+  letter-spacing:.02em;
+}
+
+/* --- root signature graphic on intro --- */
+.root-wrap{
+  position:relative;
+  height:150px;
+  margin:6px 0 34px;
+}
+.root-svg{width:100%; height:100%;}
+.root-path{
+  fill:none;
+  stroke:var(--gold-dim);
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-dasharray:600;
+  stroke-dashoffset:600;
+  animation:grow 2.2s ease forwards;
+}
+.root-path.delay1{animation-delay:.3s;}
+.root-path.delay2{animation-delay:.6s;}
+.root-path.delay3{animation-delay:.9s;}
+@keyframes grow{to{stroke-dashoffset:0;}}
+.root-dot{
+  fill:var(--gold);
+  opacity:0;
+  animation:dotIn .6s ease forwards;
+}
+@keyframes dotIn{to{opacity:1;}}
+
+/* --- category / list cards --- */
+.cat-list{display:flex; flex-direction:column; gap:12px; margin-top:6px;}
+.cat-card{
+  background:var(--bg-1);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:20px 18px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  cursor:pointer;
+  transition:border-color .2s ease, transform .15s ease, background .2s ease;
+  text-align:left;
+  color:inherit;
+  font-family:inherit;
+  width:100%;
+}
+.cat-card:active{transform:scale(.98);}
+.cat-card:hover{background:var(--bg-2);}
+.cat-card[data-cat="money"]{border-left:3px solid var(--money);}
+.cat-card[data-cat="rel"]{border-left:3px solid var(--rel);}
+.cat-card[data-cat="health"]{border-left:3px solid var(--health);}
+.cat-card[data-lang]{border-left:3px solid var(--gold-dim);}
+.cat-icon{
+  width:42px; height:42px; flex:0 0 auto;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Fraunces', serif;
+  font-size:19px;
+}
+.cat-card[data-cat="money"] .cat-icon{background:rgba(75,107,79,.14); color:var(--money);}
+.cat-card[data-cat="rel"] .cat-icon{background:rgba(184,105,122,.15); color:var(--rel);}
+.cat-card[data-cat="health"] .cat-icon{background:rgba(91,138,147,.15); color:var(--health);}
+.cat-card[data-lang] .cat-icon{background:rgba(75,107,79,.14); color:var(--gold);}
+.cat-title{font-weight:700; font-size:16.5px; margin-bottom:3px;}
+.cat-sub{font-size:13px; color:var(--text-dim); line-height:1.4;}
+.cat-arrow{margin-left:auto; color:var(--text-dim); font-size:18px;}
+
+/* --- quiz screen --- */
+.quiz-header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:26px;
+}
+.root-progress{
+  position:relative;
+  width:22px;
+  flex:0 0 22px;
+  align-self:stretch;
+  min-height:44px;
+}
+.root-progress svg{width:100%; height:100%; overflow:visible;}
+.progress-meta{flex:1;}
+.progress-label{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11.5px;
+  color:var(--text-dim);
+  letter-spacing:.05em;
+  margin-bottom:6px;
+}
+.progress-track{
+  height:3px;
+  background:var(--line);
+  border-radius:2px;
+  overflow:hidden;
+}
+.progress-fill{
+  height:100%;
+  background:var(--gold);
+  border-radius:2px;
+  transition:width .4s ease;
+}
+
+.q-number{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  color:var(--gold);
+  margin-bottom:10px;
+}
+.q-text{
+  font-family:'Fraunces', serif;
+  font-weight:600;
+  font-size:23px;
+  line-height:1.3;
+  margin-bottom:26px;
+  color:var(--text);
+}
+
+.opt-list{display:flex; flex-direction:column; gap:10px;}
+.opt{
+  background:var(--bg-1);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px 16px;
+  font-size:15px;
+  line-height:1.45;
+  color:var(--text);
+  text-align:left;
+  cursor:pointer;
+  transition:border-color .15s ease, background .15s ease, transform .1s ease;
+  font-family:'Manrope', sans-serif;
+}
+.opt:hover{border-color:var(--gold-dim); background:var(--bg-2);}
+.opt:active{transform:scale(.98);}
+.opt.selected{border-color:var(--gold); background:rgba(75,107,79,.10);}
+
+.textarea-field{
+  width:100%;
+  min-height:140px;
+  background:var(--bg-1);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+  color:var(--text);
+  font-family:'Manrope', sans-serif;
+  font-size:15px;
+  line-height:1.5;
+  outline:none;
+  resize:vertical;
+  transition:border-color .15s ease;
+}
+.textarea-field::placeholder{color:#5A6E65;}
+.textarea-field:focus{border-color:var(--gold);}
+
+.tag-list{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px;}
+.tag{
+  background:var(--bg-1);
+  border:1px solid var(--line);
+  color:var(--text);
+  padding:11px 16px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  transition:border-color .15s ease, background .15s ease, color .15s ease;
+  font-family:'Manrope', sans-serif;
+}
+.tag:hover{border-color:var(--gold-dim);}
+.tag.selected{background:rgba(75,107,79,.12); border-color:var(--gold); color:var(--gold);}
+
+.tag-custom-input{
+  width:100%;
+  background:var(--bg-1);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px 16px;
+  color:var(--text);
+  font-family:'Manrope', sans-serif;
+  font-size:14.5px;
+  outline:none;
+  transition:border-color .15s ease;
+}
+.tag-custom-input::placeholder{color:#5A6E65;}
+.tag-custom-input:focus{border-color:var(--gold);}
+
+.back-link{
+  margin-top:auto;
+  padding-top:24px;
+  font-size:13px;
+  color:var(--text-dim);
+  cursor:pointer;
+  align-self:flex-start;
+}
+.back-link:hover{color:var(--text);}
+
+/* --- result screen --- */
+.result-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:18px;
+}
+.bloom{
+  width:64px; height:64px;
+  margin-bottom:20px;
+}
+.result-title{
+  font-family:'Fraunces', serif;
+  font-weight:500;
+  font-size:28px;
+  line-height:1.2;
+  margin-bottom:16px;
+}
+.result-body{
+  color:var(--text-dim);
+  font-size:15.5px;
+  line-height:1.7;
+  margin-bottom:14px;
+}
+.result-card{
+  background:var(--bg-1);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:20px;
+  margin:18px 0 26px;
+}
+.result-card .label{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  color:var(--gold);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.result-card p{font-size:14.5px; line-height:1.65; color:var(--text);}
+
+/* --- body map --- */
+.bodymap-card{
+  background:var(--bg-1);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:22px 20px 20px;
+  margin:0 0 26px;
+  text-align:center;
+}
+.bodymap-card .label{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  color:var(--gold);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.bodymap-title{
+  font-family:'Fraunces', serif;
+  font-weight:500;
+  font-size:19px;
+  margin-bottom:16px;
+}
+.bodymap-svg-wrap{
+  width:170px;
+  margin:0 auto 16px;
+}
+.bodymap-svg-wrap svg{width:100%; height:auto; display:block;}
+.bodymap-note{
+  font-size:13.5px;
+  line-height:1.6;
+  color:var(--text-dim);
+  text-align:left;
+  background:var(--bg-2);
+  border-radius:12px;
+  padding:14px 16px;
+}
+.bodymap-legend{
+  display:flex;
+  justify-content:center;
+  gap:18px;
+  margin-top:14px;
+  font-size:11px;
+  color:var(--text-dim);
+}
+.bodymap-legend span{display:inline-flex; align-items:center; gap:6px;}
+.bodymap-legend i{width:10px; height:10px; border-radius:50%; display:inline-block;}
+.heat-zone{opacity:0; transition:opacity .5s ease;}
+
+.cta-box{
+  background:linear-gradient(165deg, rgba(75,107,79,.10), rgba(75,107,79,.03));
+  border:1px solid var(--gold-dim);
+  border-radius:var(--radius);
+  padding:24px 20px;
+  text-align:center;
+  margin-top:auto;
+}
+.cta-box h3{
+  font-family:'Fraunces', serif;
+  font-weight:500;
+  font-size:20px;
+  margin-bottom:8px;
+}
+.cta-box p{
+  font-size:13.5px;
+  color:var(--text-dim);
+  line-height:1.55;
+  margin-bottom:18px;
+}
+.cta-btn{
+  display:block;
+  width:100%;
+  background:var(--gold);
+  color:#FBFAF6;
+  border:none;
+  border-radius:12px;
+  padding:15px;
+  font-family:'Manrope', sans-serif;
+  font-weight:800;
+  font-size:15px;
+  cursor:pointer;
+  transition:transform .1s ease, background .15s ease;
+  margin-bottom:10px;
+}
+.cta-btn:active{transform:scale(.98);}
+.cta-btn.secondary{
+  background:transparent;
+  color:var(--text);
+  border:1px solid var(--line);
+  font-weight:600;
+}
+
+.restart{
+  text-align:center;
+  font-size:12.5px;
+  color:var(--text-dim);
+  margin-top:16px;
+  cursor:pointer;
+}
+.restart:hover{color:var(--text);}
+
+/* --- contact screen --- */
+.field{margin-bottom:16px;}
+.field label{
+  display:block;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--text-dim);
+  margin-bottom:8px;
+}
+.field input{
+  width:100%;
+  background:var(--bg-1);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:15px 16px;
+  color:var(--text);
+  font-family:'Manrope', sans-serif;
+  font-size:15.5px;
+  outline:none;
+  transition:border-color .15s ease;
+}
+.field input::placeholder{color:#5A6E65;}
+.field input:focus{border-color:var(--gold);}
+.field-hint{
+  font-size:12px;
+  color:var(--text-dim);
+  margin-top:20px;
+  line-height:1.5;
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+}
+.field-hint svg{flex:0 0 auto; margin-top:2px;}
+
+.privacy-note{
+  font-size:11.5px;
+  color:#5A6E65;
+  line-height:1.5;
+  margin-top:14px;
+}
+
+.primary-btn{
+  display:block;
+  width:100%;
+  background:var(--gold);
+  color:#FBFAF6;
+  border:none;
+  border-radius:12px;
+  padding:16px;
+  font-family:'Manrope', sans-serif;
+  font-weight:800;
+  font-size:15.5px;
+  cursor:pointer;
+  transition:transform .1s ease, opacity .15s ease;
+  margin-top:auto;
+}
+.primary-btn:active{transform:scale(.98);}
+.primary-btn:disabled{opacity:.4; cursor:not-allowed;}
+
+.hidden{display:none !important;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- LANGUAGE -->
+  <section id="screen-lang" class="screen lang-center">
+    <div class="lang-logo" style="font-size:36px;">🌙</div>
+    <h1>Найдите <em>корень</em><br>Түбірді табыңыз</h1>
+    <p class="lede">Тест-диагностика с психосоматологом<br>Психосоматологпен тест-диагностика</p>
+    <div class="cat-list">
+      <button class="cat-card lang-card" data-lang="ru">
+        <div class="cat-icon">RU</div>
+        <div><div class="cat-title">Русский язык</div></div>
+        <div class="cat-arrow">→</div>
+      </button>
+      <button class="cat-card lang-card" data-lang="kk">
+        <div class="cat-icon">ҚАЗ</div>
+        <div><div class="cat-title">Қазақ тілі</div></div>
+        <div class="cat-arrow">→</div>
+      </button>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="screen-about" class="screen hidden">
+    <div class="lang-logo" style="margin:10px auto 24px;">🌙</div>
+    <h1 class="lang-center" id="aboutTitle">О тесте</h1>
+    <p class="lede" id="aboutLede">Узнайте истинный источник того, что происходит с вами — в деньгах, отношениях или здоровье.</p>
+
+    <div class="result-card">
+      <p id="aboutCardText">Тест внимательно проанализирует ваши ответы и покажет, какой психологический паттерн лежит в основе ваших трудностей.</p>
+    </div>
+
+    <button class="primary-btn" id="aboutContinue">Начать →</button>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="screen-contact" class="screen hidden">
+    <div class="eyebrow" id="contactEyebrow">Шаг 1 из 3</div>
+    <h1 id="contactTitle">Прежде чем<br>начать</h1>
+    <p class="lede" id="contactLede">Оставьте имя и телефон — эксперт сможет связаться с вами и прислать разбор, если у вас останутся вопросы после теста.</p>
+
+    <div class="field">
+      <label for="inpName" id="labelName">Имя</label>
+      <input type="text" id="inpName" placeholder="Как вас зовут" autocomplete="name">
+    </div>
+    <div class="field">
+      <label for="inpPhone" id="labelPhone">Телефон</label>
+      <input type="tel" id="inpPhone" placeholder="+7 (___) ___-__-__" autocomplete="tel">
+    </div>
+
+    <div class="field-hint">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#4B6B4F" stroke-width="1.3"/><path d="M8 7.2V11.5" stroke="#4B6B4F" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="4.8" r="0.9" fill="#4B6B4F"/></svg>
+      <span id="hintText">Это нужно, чтобы прислать вам полный разбор результата и не потерять его в общем потоке.</span>
+    </div>
+    <p class="privacy-note" id="privacyText">Мы не передаём ваши данные третьим лицам. Используем их только для связи по результатам теста.</p>
+
+    <button class="primary-btn" id="contactContinue" disabled>Продолжить</button>
+  </section>
+
+  <!-- INTRO -->
+  <section id="screen-intro" class="screen hidden">
+    <div class="eyebrow" id="introEyebrow">Шаг 2 из 3 · Диагностика · 5–7 минут</div>
+    <h1 id="introTitle">Найдите <em>корень</em><br>своей проблемы</h1>
+    <p class="lede" id="introLede">Короткий тест поможет увидеть, откуда на самом деле растёт то, что мешает вам сейчас — в деньгах, отношениях или здоровье. Это не диагноз, а первый шаг к тому, чтобы разобраться по-настоящему.</p>
+
+    <div class="root-wrap">
+      <svg class="root-svg" viewBox="0 0 400 150" preserveAspectRatio="xMidYMid meet">
+        <path class="root-path" d="M200,0 L200,55 Q200,70 180,80 L120,115" />
+        <path class="root-path delay1" d="M200,55 Q200,70 220,80 L280,115" />
+        <path class="root-path delay2" d="M200,80 L200,120 Q200,132 185,138 L150,150" />
+        <path class="root-path delay3" d="M200,80 L200,120 Q200,132 215,138 L250,150" />
+        <circle class="root-dot" cx="200" cy="0" r="4" style="animation-delay:.1s"/>
+        <circle class="root-dot" cx="120" cy="115" r="3" style="animation-delay:1.4s"/>
+        <circle class="root-dot" cx="280" cy="115" r="3" style="animation-delay:1.6s"/>
+        <circle class="root-dot" cx="150" cy="150" r="3" style="animation-delay:1.9s"/>
+        <circle class="root-dot" cx="250" cy="150" r="3" style="animation-delay:2.1s"/>
+      </svg>
+    </div>
+
+    <div class="cat-list">
+      <button class="cat-card" data-cat="money">
+        <div class="cat-icon">₽</div>
+        <div>
+          <div class="cat-title" id="catMoneyTitle">Деньги</div>
+          <div class="cat-sub" id="catMoneySub">Нехватка, потолок дохода, страх больших сумм</div>
+        </div>
+        <div class="cat-arrow">→</div>
+      </button>
+      <button class="cat-card" data-cat="rel">
+        <div class="cat-icon">♡</div>
+        <div>
+          <div class="cat-title" id="catRelTitle">Отношения</div>
+          <div class="cat-sub" id="catRelSub">Одиночество, повторяющиеся сценарии, близость</div>
+        </div>
+        <div class="cat-arrow">→</div>
+      </button>
+      <button class="cat-card" data-cat="health">
+        <div class="cat-icon">◐</div>
+        <div>
+          <div class="cat-title" id="catHealthTitle">Здоровье</div>
+          <div class="cat-sub" id="catHealthSub">Хронические симптомы, тело и психика</div>
+        </div>
+        <div class="cat-arrow">→</div>
+      </button>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="screen-quiz" class="screen hidden">
+    <div class="quiz-header">
+      <div class="root-progress">
+        <svg viewBox="0 0 22 100" preserveAspectRatio="none">
+          <line x1="11" y1="0" x2="11" y2="100" stroke="var(--line)" stroke-width="2"/>
+          <line id="progressLine" x1="11" y1="0" x2="11" y2="0" stroke="var(--gold)" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="progress-meta">
+        <div class="progress-label" id="progressLabel">ВОПРОС 1 / 12</div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="q-number" id="qNumber">01</div>
+    <div class="q-text" id="qText">Вопрос</div>
+    <div class="opt-list" id="optList"></div>
+
+    <div class="back-link" id="backLink">← Выбрать другую тему</div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="screen-result" class="screen hidden">
+    <div class="result-badge" id="resultBadge">● ВАШ КОРЕНЬ НАЙДЕН</div>
+    <svg class="bloom" viewBox="0 0 64 64" id="bloomSvg">
+      <path d="M32,64 L32,30" stroke="var(--gold-dim)" stroke-width="2" fill="none"/>
+      <circle cx="32" cy="24" r="8" fill="var(--gold)" opacity="0.9"/>
+      <circle cx="20" cy="30" r="6" fill="var(--gold)" opacity="0.6"/>
+      <circle cx="44" cy="30" r="6" fill="var(--gold)" opacity="0.6"/>
+    </svg>
+    <h2 class="result-title" id="resultTitle">Название паттерна</h2>
+    <p class="result-body" id="resultBody">Описание.</p>
+
+    <div class="result-card">
+      <div class="label" id="resultCardLabel">Что это значит</div>
+      <p id="resultDetail">Детали.</p>
+    </div>
+
+    <div class="bodymap-card">
+      <div class="label" id="bodymapLabel">Где живёт напряжение</div>
+      <div class="bodymap-title" id="bodymapTitle">Телесная карта результата</div>
+      <div class="bodymap-svg-wrap">
+        <svg id="bodySvg" viewBox="0 0 200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="heatGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#E07A3F" stop-opacity="0.95"/>
+              <stop offset="100%" stop-color="#E07A3F" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <!-- figure outline -->
+          <circle cx="100" cy="35" r="26" stroke="var(--gold-dim)" stroke-width="2.5"/>
+          <path d="M92,58 L92,70 Q100,76 108,70 L108,58" stroke="var(--gold-dim)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M70,80 Q100,66 130,80 L136,178 Q100,196 64,178 Z" stroke="var(--gold-dim)" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M70,82 Q40,110 35,190" stroke="var(--gold-dim)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M130,82 Q160,110 165,190" stroke="var(--gold-dim)" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="35" cy="197" r="7" stroke="var(--gold-dim)" stroke-width="2.5"/>
+          <circle cx="165" cy="197" r="7" stroke="var(--gold-dim)" stroke-width="2.5"/>
+          <path d="M78,193 L72,395" stroke="var(--gold-dim)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M122,193 L128,395" stroke="var(--gold-dim)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M72,395 L60,412" stroke="var(--gold-dim)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M128,395 L140,412" stroke="var(--gold-dim)" stroke-width="2.5" stroke-linecap="round"/>
+
+          <!-- heat zones (toggled via JS) -->
+          <circle id="zone-jaw" class="heat-zone" cx="100" cy="46" r="20" fill="url(#heatGrad)"/>
+          <circle id="zone-throat" class="heat-zone" cx="100" cy="64" r="18" fill="url(#heatGrad)"/>
+          <circle id="zone-chest" class="heat-zone" cx="100" cy="107" r="30" fill="url(#heatGrad)"/>
+          <circle id="zone-stomach" class="heat-zone" cx="100" cy="152" r="26" fill="url(#heatGrad)"/>
+          <circle id="zone-shoulders-l" class="heat-zone" cx="68" cy="83" r="18" fill="url(#heatGrad)"/>
+          <circle id="zone-shoulders-r" class="heat-zone" cx="132" cy="83" r="18" fill="url(#heatGrad)"/>
+          <circle id="zone-hands-l" class="heat-zone" cx="35" cy="197" r="16" fill="url(#heatGrad)"/>
+          <circle id="zone-hands-r" class="heat-zone" cx="165" cy="197" r="16" fill="url(#heatGrad)"/>
+          <circle id="zone-lowerback" class="heat-zone" cx="100" cy="180" r="26" fill="url(#heatGrad)"/>
+        </svg>
+      </div>
+      <div class="bodymap-note" id="bodymapNote">Описание телесного напряжения появится здесь.</div>
+      <div class="bodymap-legend">
+        <span><i style="background:#E07A3F;"></i><span id="legendPrimary">сильнее</span></span>
+        <span><i style="background:#E07A3F; opacity:.45;"></i><span id="legendSecondary">слабее</span></span>
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <h3 id="ctaTitle">Пора разобраться до конца</h3>
+      <p id="ctaP">Тест показывает направление — глубинная проработка происходит на консультации. Запишитесь, чтобы снять этот паттерн, а не просто узнать о нём.</p>
+      <button class="cta-btn" id="ctaBook">Отправить эксперту и записаться</button>
+      <button class="cta-btn secondary" id="ctaShare">Сохранить результат себе</button>
+    </div>
+    <div class="restart" id="restartLink">Пройти тест по другой теме</div>
+  </section>
+
+</div>
+
+<script>
+/* ======================= UI STRINGS ======================= */
+const STRINGS = {
+  ru: {
+    aboutTitle: 'О тесте',
+    aboutLede: 'Узнайте истинный источник того, что происходит с вами — в деньгах, отношениях или здоровье.',
+    aboutCardText: 'Тест внимательно проанализирует ваши ответы и покажет, какой психологический паттерн лежит в основе ваших трудностей.',
+    aboutContinueBtn: 'Начать →',
+
+    contactEyebrow: 'Шаг 1 из 3',
+    contactTitle: 'Прежде чем<br>начать',
+    contactLede: 'Оставьте имя и телефон — эксперт сможет связаться с вами и прислать разбор, если у вас останутся вопросы после теста.',
+    labelName: 'Имя', placeholderName: 'Как вас зовут',
+    labelPhone: 'Телефон', placeholderPhone: '+7 (___) ___-__-__',
+    hintText: 'Это нужно, чтобы прислать вам полный разбор результата и не потерять его в общем потоке.',
+    privacyText: 'Мы не передаём ваши данные третьим лицам. Используем их только для связи по результатам теста.',
+    contactContinueBtn: 'Продолжить',
+
+    introEyebrow: 'Шаг 2 из 3 · Диагностика · 5–7 минут',
+    introTitle: 'Найдите <em>корень</em><br>своей проблемы',
+    introLede: 'Короткий тест поможет увидеть, откуда на самом деле растёт то, что мешает вам сейчас — в деньгах, отношениях или здоровье. Это не диагноз, а первый шаг к тому, чтобы разобраться по-настоящему.',
+
+    backLinkText: '← Выбрать другую тему',
+    questionWord: 'ВОПРОС',
+    progressLabel: (n,total,cat)=> `ВОПРОС ${n} / ${total} · ${cat.toUpperCase()}`,
+
+    resultBadgeText: '● ВАШ КОРЕНЬ НАЙДЕН',
+    resultCardLabel: 'Что это значит',
+    ctaTitle: 'Пора разобраться до конца',
+    ctaP: 'Тест показывает направление — глубинная проработка происходит на консультации. Запишитесь, чтобы снять этот паттерн, а не просто узнать о нём.',
+    ctaBookBtnText: 'Отправить эксперту и записаться',
+    ctaShareBtnText: 'Сохранить результат себе',
+    restartLinkText: 'Пройти тест по другой теме',
+
+    problemPrompts: {
+      money: 'Опишите вашу проблему с деньгами (например: постоянно не хватает, боюсь их тратить, много работаю, а денег нет). Если сложно сформулировать — напишите как есть.',
+      rel: 'Опишите вашу проблему в отношениях (например: постоянно ссоримся, не могу найти партнёра, боюсь близости).',
+      health: 'Опишите вашу проблему со здоровьем (например: псориаз, частые мигрени, боли в спине). Если проблем нет, напишите «Нет проблем».'
+    },
+    freetextPlaceholder: 'Напишите здесь...',
+    continueBtn: 'Продолжить →',
+    durationPrompt: 'Как давно вы живёте с этой ситуацией?',
+    durationOptions: ['Недавно','Полгода','1 год','3–5 лет','Больше 5 лет','С детства'],
+    situationPrompt: 'Какая ситуация произошла в вашей жизни, когда это началось? Опишите откровенно.',
+    emotionsPrompt: 'Что вы чувствовали в тот момент?',
+    emotionsOptions: ['Страх','Гнев','Обида','Вина','Стыд','Одиночество','Беспомощность','Разочарование'],
+    emotionsCustomPlaceholder: 'Свой вариант...',
+    finishBtn: 'Получить результат →',
+
+    bodymapLabel: 'Где живёт напряжение',
+    bodymapTitle: 'Телесная карта результата',
+    legendPrimary: 'сильнее',
+    legendSecondary: 'слабее',
+
+    attached: 'приложено', notAttached: 'нет',
+    shareRequestTitle: 'Заявка на консультацию',
+    shareText: (cat,title,name,phone,problem,duration,situation,emotions)=> `Заявка с теста «К Корню»\n\nТема: ${cat}\nРезультат: ${title}\nИмя: ${name}\nТелефон: ${phone}\n\nОписание проблемы: ${problem || '—'}\nДлится: ${duration || '—'}\nСитуация: ${situation || '—'}\nЭмоции: ${emotions || '—'}`,
+    alertClipboard: 'Заявка скопирована в буфер обмена. Отправьте её эксперту в Telegram/WhatsApp вместе с фото.\n\nДля продакшена: подключите сюда CRM, Telegram-бота или email-сервис, чтобы заявка (включая фото) уходила автоматически — сейчас это заглушка.',
+    shareResultTitle: 'К Корню',
+    shareResultText: (title, body)=> `Мой результат теста «К Корню»: ${title}\n\n${body}`,
+    alertClipboardResult: 'Результат скопирован в буфер обмена.'
+  },
+  kk: {
+    aboutTitle: 'Тест туралы',
+    aboutLede: 'Ақшада, қарым-қатынаста немесе денсаулықта болып жатқанның шынайы себебін біліңіз.',
+    aboutCardText: 'Тест жауаптарыңызды мұқият талдап, қиындықтарыңыздың негізінде қандай психологиялық үлгі жатқанын көрсетеді.',
+    aboutContinueBtn: 'Бастау →',
+
+    contactEyebrow: '1-қадам / 3',
+    contactTitle: 'Бастамас<br>бұрын',
+    contactLede: 'Атыңыз бен телефоныңызды қалдырыңыз — маман сізбен байланысып, тесттен кейін сұрақтарыңыз болса, талдау жібере алады.',
+    labelName: 'Аты-жөні', placeholderName: 'Атыңызды жазыңыз',
+    labelPhone: 'Телефон', placeholderPhone: '+7 (___) ___-__-__',
+    hintText: 'Бұл нәтиженің толық талдауын жіберіп, оны жалпы ағында жоғалтпау үшін қажет.',
+    privacyText: 'Деректеріңізді үшінші тұлғаларға бермейміз. Оларды тек тест нәтижелері бойынша байланысу үшін қолданамыз.',
+    contactContinueBtn: 'Жалғастыру',
+
+    introEyebrow: '2-қадам / 3 · Диагностика · 5–7 минут',
+    introTitle: '<em>Түбірді</em><br>табыңыз',
+    introLede: 'Қысқа тест қазір сізге кедергі келтіріп жатқан нәрсенің қайдан өсіп шыққанын — ақшада, қарым-қатынаста немесе денсаулықта — көруге көмектеседі. Бұл диагноз емес, шынымен түсінудің алғашқы қадамы.',
+
+    backLinkText: '← Басқа тақырыпты таңдау',
+    questionWord: 'СҰРАҚ',
+    progressLabel: (n,total,cat)=> `${n}-СҰРАҚ / ${total} · ${cat.toUpperCase()}`,
+
+    resultBadgeText: '● ТҮБІРІҢІЗ ТАБЫЛДЫ',
+    resultCardLabel: 'Бұл нені білдіреді',
+    ctaTitle: 'Соңына дейін түсінудің уақыты келді',
+    ctaP: 'Тест бағытты көрсетеді — терең жұмыс консультацияда өтеді. Бұл үлгіні тек біліп қана қоймай, алып тастау үшін жазылыңыз.',
+    ctaBookBtnText: 'Маманға жіберу және жазылу',
+    ctaShareBtnText: 'Нәтижені өзіме сақтау',
+    restartLinkText: 'Басқа тақырып бойынша тестті қайта өту',
+
+    problemPrompts: {
+      money: 'Ақшамен байланысты мәселеңізді сипаттаңыз (мысалы: үнемі жетіспейді, оны жұмсаудан қорқамын, көп жұмыс істеймін, бірақ ақша жоқ). Айту қиын болса — бар қалпында жазыңыз.',
+      rel: 'Қарым-қатынастағы мәселеңізді сипаттаңыз (мысалы: үнемі ұрысамыз, серіктес таба алмаймын, жақындықтан қорқамын).',
+      health: 'Денсаулық мәселеңізді сипаттаңыз (мысалы: псориаз, жиі мигрень, арқа ауруы). Мәселе болмаса, «Мәселе жоқ» деп жазыңыз.'
+    },
+    freetextPlaceholder: 'Осында жазыңыз...',
+    continueBtn: 'Жалғастыру →',
+    durationPrompt: 'Бұл жағдаймен қанша уақыттан бері өмір сүріп жатырсыз?',
+    durationOptions: ['Жақында','Жарты жыл','1 жыл','3–5 жыл','5 жылдан астам','Балалық шақтан'],
+    situationPrompt: 'Бұл басталғанда өміріңізде қандай жағдай болды? Ашық сипаттаңыз.',
+    emotionsPrompt: 'Сол сәтте не сезіндіңіз?',
+    emotionsOptions: ['Қорқыныш','Ашу','Өкпе','Кінә','Ұят','Жалғыздық','Дәрменсіздік','Көңілсіздік'],
+    emotionsCustomPlaceholder: 'Өз нұсқаңыз...',
+    finishBtn: 'Нәтижені алу →',
+
+    bodymapLabel: 'Кернеу қай жерде тұрады',
+    bodymapTitle: 'Нәтиженің дене картасы',
+    legendPrimary: 'күштірек',
+    legendSecondary: 'әлсіздеу',
+
+    attached: 'қоса берілді', notAttached: 'жоқ',
+    shareRequestTitle: 'Консультацияға өтінім',
+    shareText: (cat,title,name,phone,problem,duration,situation,emotions)=> `«Түбірге» тестінің өтінімі\n\nТақырып: ${cat}\nНәтиже: ${title}\nАты-жөні: ${name}\nТелефон: ${phone}\n\nМәселенің сипаттамасы: ${problem || '—'}\nҚанша уақыттан бері: ${duration || '—'}\nЖағдай: ${situation || '—'}\nЭмоциялар: ${emotions || '—'}`,
+    alertClipboard: 'Өтінім алмасу буферіне көшірілді. Оны маманға Telegram/WhatsApp арқылы фотосуреттермен бірге жіберіңіз.\n\nӨндірістік нұсқа үшін: өтінім (фотосуреттермен қоса) автоматты түрде түсуі үшін осында CRM, Telegram-бот немесе email-қызметін қосыңыз — қазір бұл алдын ала үлгі ғана.',
+    shareResultTitle: 'Түбірге',
+    shareResultText: (title, body)=> `«Түбірге» тестінің нәтижем: ${title}\n\n${body}`,
+    alertClipboardResult: 'Нәтиже алмасу буферіне көшірілді.'
+  }
+};
+
+/* ======================= DATA (RU) ======================= */
+const CATEGORIES_RU = {
+  money: {
+    label: 'Деньги',
+    patterns: [
+      { title: 'Родовой сценарий нехватки',
+        body: 'Ваши сложности с деньгами — не случайность и не лень. Это выученный в семье сценарий «денег всегда мало», который вы неосознанно продолжаете, даже когда объективных причин для нехватки больше нет.',
+        detail: 'Такой паттерн формируется в детстве, когда ребёнок считывает тревогу родителей по поводу денег и делает вывод: «недостаток — это нормально, это про нас». Тело и психика продолжают воссоздавать знакомую реальность, даже если сознательно вы хотите другого. Работа с этим паттерном — это не про мотивацию «зарабатывать больше», а про то, чтобы бережно отделить свою жизнь от родового сценария.',
+        zones: ['stomach','chest'],
+        bodyNote: 'Основное напряжение обычно держится в животе и груди — там, где тело хранит тревогу за выживание.' },
+      { title: 'Страх успеха и самосаботаж',
+        body: 'Похоже, дело не в том, что вы не умеете зарабатывать, — а в том, что часть вас боится того, что будет, если вы по-настоящему преуспеете. И в решающий момент включается тормоз.',
+        detail: 'Страх успеха часто связан со страхом изменить привычные отношения, потерять «своих» или взять на себя ответственность, к которой психика ещё не готова. Самосаботаж — это не слабость характера, а защитный механизм. Пока он не осознан, любые «прорывы» будут раз за разом сворачиваться сами собой.',
+        zones: ['throat','shoulders'],
+        bodyNote: 'Напряжение чаще всего в горле (несказанное) и плечах (тяжесть ответственности).' },
+      { title: '«Деньги = зло» — запрет на изобилие',
+        body: 'В глубине есть убеждение, что большие деньги — это что-то нечистое, опасное или недостойное. Это делает почти невозможным спокойно иметь и приумножать то, что вы зарабатываете.',
+        detail: 'Такие убеждения редко формируются напрямую — чаще они впитываются из культурных, религиозных или семейных установок вроде «не в деньгах счастье» или «богатые нечестные». Тело реагирует на изобилие тревогой или виной вместо радости. Разбор этого паттерна освобождает естественное право иметь достаточно.',
+        zones: ['stomach','jaw'],
+        bodyNote: 'Тело держит зажим в области живота и челюсти — вина и невысказанное осуждение.' },
+      { title: 'Гиперконтроль и недоверие потоку',
+        body: 'Вы много считаете, анализируете, подстраховываетесь — но лёгкости с деньгами это не прибавляет. За этим часто стоит глубокое недоверие: миру, обстоятельствам, даже себе.',
+        detail: 'Гиперконтроль — это способ психики справляться с тревогой, но он же и блокирует приток нового: пока всё держится «на разрыв», трудно замечать возможности и разрешать себе рисковать. Проработка этого паттерна возвращает способность доверять процессу, не теряя разумной опоры.',
+        zones: ['shoulders','hands'],
+        bodyNote: 'Напряжение концентрируется в плечах и кистях рук — там, где живёт контроль.' }
+    ],
+    questions: [
+      ['Когда речь заходит о больших деньгах, что вы чувствуете в теле?',['Тяжесть, будто это не про меня — «в нашей семье так не бывает»','Волнение и тревогу — а вдруг не справлюсь с ответственностью','Лёгкое отвращение — большие деньги портят людей','Напряжение — нужно всё просчитать, иначе будет провал']],
+      ['Как в вашей семье говорили о деньгах в детстве?',['«Денег никогда не хватает», «богатые обманывают»','Про деньги почти не говорили, но родители сами не преуспели','Деньги связывали с грехом, жадностью, нечестностью','Деньги = выживание, их нужно жёстко контролировать']],
+      ['Что происходит, когда у вас появляется крупная сумма?',['Быстро находится, куда её потратить или отдать','Появляется страх, что теперь придётся соответствовать','Чувство вины, будто взяли чужое','Тревога за сохранность, невозможность расслабиться']],
+      ['Как вы реагируете на комплимент по поводу успеха?',['«Мне просто повезло»','Смущение, хочется уменьшить значимость','Неловкость, будто вас в чём-то уличили','Настороженность — а что теперь потребуют взамен']],
+      ['Что чаще мешает вам просить достойную оплату?',['Ощущение, что «не по чину»','Страх, что не оправдаете ожидания на новом уровне','Ощущение, что просить деньги — стыдно','Недоверие: лучше синица в руках, чем риск']],
+      ['Как вы относитесь к финансовому планированию?',['Живёте по принципу «как-нибудь проживём», как и родители','Планы есть, но саботируете их в последний момент','Избегаете думать о деньгах вообще','Планируете всё до мелочей, любое отклонение пугает']],
+      ['Что вы чувствуете, наблюдая за очень богатыми людьми?',['«Это не для таких, как мы»','Смесь восхищения и страха оказаться на их месте','Осуждение — наверное, нечестным путём','Зависть и мысль «я бы справился лучше, но...»']],
+      ['Как заканчиваются ваши финансовые «прорывы»?',['Обычно не начинаются — «и так сойдёт»','Начинаются ярко, но потом сами всё разрушаете','Даже при успехе быстро тратите «на всякий случай»','Успех есть, но радости и лёгкости в нём нет']],
+      ['Какая фраза вам ближе всего?',['«У нас в роду никогда не было богатых»','«Если у меня будет много, я потеряю близких»','«Большие деньги — большая ответственность/грех»','«Я никому не могу доверить свои финансы»']],
+      ['Что происходит с отношениями, когда у вас становится больше денег?',['Появляется чувство вины перед близкими, у кого меньше','Боитесь, что перестанете быть «своим» для друзей','Стараетесь скрывать доход, чтобы не осуждали','Начинаете ещё сильнее всё контролировать в отношениях']],
+      ['Как вы реагируете на финансовый риск?',['Избегаете — «лучше не рисковать, у нас так принято»','Беретесь, но саботируете в шаге от результата','Риск кажется чем-то нечистым, предпочитаете «спокойный» путь','Долго анализируете и часто упускаете момент']],
+      ['Что, по-вашему, стоит за вашими трудностями с деньгами?',['Программа рода, которую я неосознанно продолжаю','Страх того, что будет, если я действительно преуспею','Внутренний запрет — «много денег иметь нельзя/стыдно»','Невозможность довериться потоку и отпустить контроль']]
+    ]
+  },
+  rel: {
+    label: 'Отношения',
+    patterns: [
+      { title: 'Страх покинутости',
+        body: 'В основе ваших трудностей в отношениях лежит глубокий страх остаться одному/одной. Он заставляет цепляться, угождать или тревожиться даже там, где для этого нет реальных поводов.',
+        detail: 'Этот страх обычно формируется в раннем возрасте, если опыт близости с значимым взрослым был нестабильным. Взрослая психика продолжает искать подтверждения «меня не бросят» — и от этого отношения становятся тревожными вместо тёплых. Работа с этим паттерном возвращает способность быть в близости, не растворяясь в страхе.',
+        zones: ['chest','throat'],
+        bodyNote: 'Тело чаще всего сжимается в груди и горле — там, где живёт тревога о близости.' },
+      { title: 'Слияние и потеря себя',
+        body: 'В отношениях вы склонны растворяться в партнёре — до такой степени, что теряете контакт с собственными желаниями, границами и интересами.',
+        detail: 'Слияние часто формируется в семьях, где границы между «я» и «мы» были размыты с детства. Такой паттерн даёт иллюзию безопасности через близость, но лишает опоры на себя. Проработка помогает выстроить отношения, где двое остаются собой, а не растворяются друг в друге.',
+        zones: ['stomach','chest'],
+        bodyNote: 'Напряжение разлито в животе и груди — там, где стирается граница «я».' },
+      { title: 'Недоверие и защитные стены',
+        body: 'Вы держите людей на безопасном расстоянии — так спокойнее, но и близости в итоге почти не остаётся. За этим часто стоит болезненный прошлый опыт.',
+        detail: 'Защитные стены — это разумная реакция психики на боль, которая когда-то случилась. Проблема в том, что они не выбирают избирательно: защищая от боли, они же не пускают и тепло. Работа с этим паттерном — это не «стать открытым любой ценой», а научиться доверять постепенно, с ощущением безопасности.',
+        zones: ['chest','shoulders'],
+        bodyNote: 'Тело держит броню в груди и плечах — защита от боли.' },
+      { title: 'Повторение родительского сценария',
+        body: 'Похоже, вы неосознанно воссоздаёте в своих отношениях динамику, знакомую по родительской семье, — даже если сознательно хотели совсем другого.',
+        detail: 'Психика склонна воспроизводить знакомые модели близости, даже болезненные, потому что они предсказуемы. Это происходит автоматически, вне контроля сознания. Увидеть сценарий — уже половина пути к тому, чтобы перестать его повторять и выбрать свой собственный способ строить отношения.',
+        zones: ['shoulders','lowerback'],
+        bodyNote: 'Напряжение оседает в плечах и пояснице — там, где тело несёт унаследованный груз.' }
+    ],
+    questions: [
+      ['Что вы чувствуете, когда партнёр на день перестаёт выходить на связь?',['Панику — «он(а) уходит от меня»','Растерянность — «кто я без него/неё»','Спокойствие, но внутри — «вот видите, на них нельзя положиться»','Знакомое чувство — «точно так же было у родителей»']],
+      ['Как вы ведёте себя в начале отношений?',['Стараетесь угодить, чтобы не потерять человека','Быстро растворяетесь в интересах и жизни партнёра','Держите дистанцию, проверяете «на прочность»','Замечаете, что повторяете сценарий родителей']],
+      ['Что пугает вас больше всего в близких отношениях?',['Что вас разлюбят и оставят','Что вы потеряете себя и свои границы','Что вам снова причинят боль','Что всё закончится так же, как у мамы/папы']],
+      ['Как вы реагируете на конфликт с партнёром?',['Готовы на всё, лишь бы помириться и не потерять','Соглашаетесь с партнёром, даже если не согласны внутри','Замыкаетесь и отгораживаетесь эмоционально','Замечаете за собой реакции, как у одного из родителей']],
+      ['Что происходит с вашими личными границами в паре?',['Размываются — лишь бы не спугнуть','Практически исчезают — вы живёте интересами партнёра','Жёсткие границы, близко никого не подпускаете','Границы такие же нечёткие или жёсткие, как у родителей']],
+      ['Какая мысль чаще всего крутится в голове в отношениях?',['«Только бы не остаться одной/одному»','«Без него/неё я не целый(ая) человек»','«Доверять — опасно»','«У нас в семье все так и жили»']],
+      ['Как вы выбираете партнёров?',['Часто тех, кто эмоционально недоступен, — и держитесь изо всех сил','Тех, в чью жизнь легко «раствориться» целиком','Держите людей на расстоянии, редко подпускаете близко','Замечаете сходство с одним из родителей']],
+      ['Что происходит, когда отношения становятся стабильными?',['Появляется тревога — «а вдруг это ненадолго»','Постепенно теряете свои интересы и круг общения','Начинаете неосознанно отдаляться сами','Начинаете повторять модель поведения родителей друг с другом']],
+      ['Как вы переживаете расставания?',['Очень тяжело, будто рушится весь мир','Долго не можете понять, кто вы без этого человека','Быстро «закрываетесь», убеждая себя, что так лучше','Замечаете похожий сценарий — «опять как в семье»']],
+      ['Что вы чувствуете, когда партнёру нужно личное пространство?',['Тревогу и страх, что это начало конца','Растерянность — не знаете, чем заняться без него/неё','Облегчение, но с оттенком «я так и знал(а)»','Похожее чувство было у одного из родителей']],
+      ['Как вы относитесь к своим потребностям в отношениях?',['Прячете их, лишь бы не создавать поводов для ухода','Не всегда понимаете, какие они, — привыкли ориентироваться на партнёра','Держите при себе, не доверяя, что их услышат','Замечаете, что не умеете их называть — как и в родительской семье']],
+      ['Что, по-вашему, лежит в основе ваших трудностей в отношениях?',['Глубинный страх быть покинутым/ой','Слияние с партнёром и потеря себя','Недоверие и внутренние защитные стены','Неосознанное повторение родительского сценария']]
+    ]
+  },
+  health: {
+    label: 'Здоровье',
+    patterns: [
+      { title: 'Подавленные эмоции',
+        body: 'Похоже, тело сейчас говорит за вас то, что вы долго не позволяли себе выразить словами — злость, боль, обиду. Симптом становится голосом непрожитых чувств.',
+        detail: 'Когда эмоции систематически подавляются, психика находит другой канал — тело. Это не «психосоматика придумана», а реальный физиологический механизм хронического напряжения и сдерживания. Разрешить себе чувствовать и проживать — часто первый шаг к облегчению симптома.',
+        zones: ['throat','chest'],
+        bodyNote: 'Тело чаще всего сжимается в горле и груди — там, где живут невысказанные чувства.' },
+      { title: 'Хроническое перенапряжение и гиперответственность',
+        body: 'Вы годами несёте на себе больше, чем один человек может выдержать, и тело в какой-то момент начинает сигналить об этом единственным доступным ему способом.',
+        detail: 'Гиперответственность часто формируется у тех, кто рано взял на себя роль «сильного» в семье. Психика привыкает работать на пределе, не давая себе права остановиться без веской причины — и симптом становится этой причиной. Работа с паттерном учит останавливаться до того, как тело сделает это принудительно.',
+        zones: ['shoulders','lowerback'],
+        bodyNote: 'Напряжение копится в плечах, шее и пояснице — там, где тело несёт лишний груз.' },
+      { title: 'Вторичная выгода симптома',
+        body: 'Как бы неприятно это ни звучало, часть вас неосознанно получает через симптом то, что иначе получить не удаётся: паузу, заботу, право сказать «нет».',
+        detail: 'Вторичная выгода — не осознанная манипуляция, а бессознательный компромисс психики: раз прямо попросить об отдыхе или внимании «нельзя», тело находит обходной путь. Осознание этой связи не означает, что боль ненастоящая — оно открывает возможность получать то же самое напрямую, без посредничества болезни.',
+        zones: ['stomach','hands'],
+        bodyNote: 'Тело держит зажим в животе и руках — там, где живёт скрытая потребность.' },
+      { title: 'Родовые паттерны',
+        body: 'В истории вашей семьи прослеживается похожий сценарий — как будто симптом передаётся не только через гены, но и через невысказанные истории и роли.',
+        detail: 'Семейные (родовые) паттерны — это не мистика, а реальный механизм передачи неосознанных установок, ролей и способов справляться с трудностями из поколения в поколение. Увидеть связь с историей рода часто снимает часть вины и открывает путь к тому, чтобы прожить свою историю иначе.',
+        zones: ['lowerback','chest'],
+        bodyNote: 'Напряжение разлито в пояснице и груди — там, где тело несёт историю рода.' }
+    ],
+    questions: [
+      ['Когда вы злитесь, что происходит чаще всего?',['Проглатываете злость, она «оседает» в теле','Не замечаете её — слишком заняты делами и ответственностью','Симптом обостряется именно тогда, когда нужно от чего-то отказаться','Вспоминаете, что так же болел кто-то из родителей/бабушек']],
+      ['Как вы обычно относитесь к отдыху?',['Позволяете себе отдых, только когда тело «заставляет» — через болезнь','Отдых кажется роскошью, вы всегда за всех отвечаете','Болезнь — единственный законный повод отдохнуть','В семье отдыхать было «не принято»']],
+      ['Что происходит с симптомом, когда вы приближаетесь к важному решению?',['Обостряется — тело словно «говорит» вместо вас','Усиливается на фоне перегрузки и невозможности всё успеть','Даёт удобный повод отложить решение','Похожий симптом был у родственника в похожей ситуации']],
+      ['Как вы справляетесь с чужими эмоциями и просьбами?',['Сдерживаете свои чувства, чтобы не расстраивать других','Берёте на себя больше, чем можете, — иначе «стыдно»','Замечаете, что забота окружающих усиливается, когда вы болеете','Похоже на то, как вела себя мама/бабушка']],
+      ['Что вы говорите себе, когда чувствуете усталость?',['«Не время расклеиваться, надо держаться»','«Я должен(на) справляться, даже если тяжело»','«Раз тело болит — точно можно ничего не делать»','«У нас в семье всегда так — работать через силу»']],
+      ['Как давно вы позволяли себе честно поплакать или разозлиться?',['Очень давно — эмоции обычно «не находят выхода»','Некогда — всегда есть дела важнее собственных чувств','Обычно это случается, когда симптом уже даёт разрешение на паузу','В семье не было принято проявлять эмоции открыто']],
+      ['Что происходит в организме, когда вы сдерживаете важный разговор?',['Появляется напряжение, ком, боль в теле','Списываете на переутомление и продолжаете тянуть','Часто именно тогда обостряется знакомый симптом','Замечаете похожий телесный сценарий у родителей']],
+      ['Как вы относитесь к собственным границам в заботе о других?',['Молча терпите, лишь бы не создавать конфликт','Границ почти нет — вы «должны» быть опорой для всех','Болезнь — единственное, что позволяет вам сказать «нет»','Похожий паттерн самоотдачи был в роду']],
+      ['Что чаще всего предшествует обострению вашего состояния?',['Ситуация, где пришлось промолчать о своих чувствах','Период, где взяли на себя слишком много','Момент, когда очень нужен был предлог отступить','Совпадает с датами/событиями, похожими на семейную историю']],
+      ['Как вы реагируете, когда кто-то из близких заботится о вас во время болезни?',['Впервые чувствуете, что можно расслабиться','Неловко принимать заботу, привычнее заботиться самому','Замечаете, что становится «выгодно» поболеть подольше','Вспоминаете похожие сцены из детства в семье']],
+      ['Что вы думаете о связи тела и психики?',['Чувствую, что тело «держит» то, что не проговорено','Верю, но не успеваю остановиться и прислушаться','Замечаю, что симптомы выгодны в конкретных ситуациях','Вижу явную связь с историей болезней в роду']],
+      ['Что, по-вашему, стоит за вашим симптомом?',['Подавленные, непрожитые эмоции','Хроническое перенапряжение и гиперответственность','Скрытая вторичная выгода симптома','Унаследованный родовой паттерн']]
+    ]
+  }
+};
+
+/* ======================= DATA (KK) ======================= */
+const CATEGORIES_KK = {
+  money: {
+    label: 'Ақша',
+    patterns: [
+      { title: 'Тектің тапшылық сценарийі',
+        body: 'Ақшамен байланысты қиындықтарыңыз кездейсоқтық та, жалқаулық та емес. Бұл — отбасыңызда үйреніп қалған «ақша әрқашан жетіспейді» деген сценарий, оны нақты себеп болмаса да, санамен байқамай жалғастырып келесіз.',
+        detail: 'Мұндай үлгі балалық шақта, бала ата-анасының ақшаға қатысты алаңдаушылығын сезініп, «жетіспеушілік — қалыпты жағдай, бұл біз туралы» деген қорытынды жасағанда қалыптасады. Дене мен психика саналы түрде басқаны қаласаңыз да, таныс шындықты қайта жаңғыртуды жалғастырады. Бұл үлгімен жұмыс — «көбірек табу» деген мотивация емес, өз өміріңізді тектің сценарийінен ақырын бөліп алу туралы.',
+        zones: ['stomach','chest'],
+        bodyNote: 'Негізгі кернеу әдетте құрсақ пен кеудеде ұсталады — тәннің тіршілік қауіп-қатеріне алаңдаушылығы сақталатын жер.' },
+      { title: 'Табыстан қорқу және өзін-өзі тежеу',
+        body: 'Мәселе ақша табуды білмеуіңізде емес секілді — шын мәнінде табысқа жеткен жағдайда не болатынынан бір бөлігіңіз қорқады. Шешуші сәтте тежегіш іске қосылады.',
+        detail: 'Табыстан қорқу көбіне таныс қарым-қатынастарды өзгертуден, «өзіміздікілерден» айырылудан немесе психика әлі дайын емес жауапкершілікті мойнына алудан қорқумен байланысты. Өзін-өзі тежеу — мінез әлсіздігі емес, қорғаныс механизмі. Ол түсінілмейінше, кез келген «серпіліс» қайта-қайта өздігінен бұзылып отырады.',
+        zones: ['throat','shoulders'],
+        bodyNote: 'Кернеу көбіне тамақта (айтылмаған сөз) және иықта (жауапкершілік ауыртпалығы) болады.' },
+      { title: '«Ақша — жамандық» деген ішкі тыйым',
+        body: 'Тереңде үлкен ақша — бір таза емес, қауіпті немесе лайықсыз нәрсе деген сенім жатыр. Бұл тапқан ақшаңызды тыныш ұстап, көбейтуді дерлік мүмкін емес етеді.',
+        detail: 'Мұндай сенімдер сирек тікелей қалыптасады — көбіне мәдени, діни немесе отбасылық көзқарастардан («бақыт ақшада емес», «байлар — арам») сіңеді. Дене молшылыққа қуанышпен емес, алаңдаушылықпен немесе кінәмен жауап береді. Бұл үлгіні талдау жеткілікті ақшаға ие болудың табиғи құқығын босатады.',
+        zones: ['stomach','jaw'],
+        bodyNote: 'Дене құрсақ пен жақ аймағында тежеледі — кінә мен айтылмаған айыптау.' },
+      { title: 'Шектен тыс бақылау және ағымға сенбеу',
+        body: 'Көп есептейсіз, талдайсыз, сақтанасыз — бірақ бұл ақшамен жеңілдік әкелмейді. Мұның артында әлемге, жағдайларға, тіпті өзіңізге деген терең сенімсіздік жатады жиі.',
+        detail: 'Шектен тыс бақылау — психиканың алаңдаушылықпен күресу тәсілі, бірақ ол жаңаның келуіне де кедергі жасайды: барлығы «үзілу шегінде» ұсталғанда, мүмкіндіктерді байқау және тәуекел етуге өзіңізге рұқсат беру қиын болады.',
+        zones: ['shoulders','hands'],
+        bodyNote: 'Кернеу иықтар мен қолдарда шоғырланады — бақылау тұратын жер.' }
+    ],
+    questions: [
+      ['Үлкен ақша туралы сөз болғанда денеңізде не сезінесіз?',['Ауырлық, «бізде олай болмайды» дегендей','Толқу мен алаңдаушылық — жауапкершілікпен қалай күресемін деген','Жеңіл жиіркеніш — үлкен ақша адамды бұзады','Кернеу — бәрін есептеу керек, әйтпесе сәтсіздікке ұрынасың']],
+      ['Балалық шағыңызда отбасыңызда ақша туралы қалай айтатын?',['«Ақша ешқашан жетпейді», «байлар алдайды»','Ақша туралы аз айтатын, бірақ ата-анам да табысқа жете алмады','Ақшаны күнә, ашкөздікпен байланыстыратын','Ақша = өмір сүру, оны қатаң бақылау керек']],
+      ['Қолыңызға үлкен сома түскенде не болады?',['Тез арада қайда жұмсау керегі табылады','Енді осыған сай болу керек деген қорқыныш пайда болады','Бөтен нәрсе алғандай кінә сезімі','Сақтауға алаңдаушылық, тынышталу мүмкін емес']],
+      ['Табысыңызға айтылған мақтауға қалай жауап бересіз?',['«Жай ғана сәттілік болды»','Ұялу, маңыздылығын кішірейткіңіз келеді','Қолайсыздық, бір нәрседен ұсталып қалғандай','Сақтық — енді неге айырбас сұрайды деген']],
+      ['Лайықты ақы сұрауға көбіне не кедергі жасайды?',['«Маған лайық емес» деген сезім','Жаңа деңгейде күтілетінге сай бола алмаймын деген қорқыныш','Ақша сұрау — ұят деген сезім','Сенімсіздік: тәуекел еткенше, қолдағыны ұстаған дұрыс']],
+      ['Қаржылық жоспарлауға қалай қарайсыз?',['«Қалай да өмір сүреміз» деген қағидамен, ата-анам сияқты','Жоспарлар бар, бірақ соңғы сәтте өзіңіз бұзасыз','Ақша туралы ойлаудан аулақ жүресіз','Бәрін ұсақ-түйегіне дейін жоспарлайсыз, кез келген ауытқу қорқытады']],
+      ['Өте бай адамдарды көргенде не сезінесіз?',['«Бұл біздей адамдарға арналмаған»','Таңдану мен олардың орнында болудан қорқу аралас сезім','Айыптау — сірә, адал жолмен емес','Қызғаныш пен «мен жақсырақ жасар едім, бірақ...» деген ой']],
+      ['Қаржылық «серпілістеріңіз» қалай аяқталады?',['Әдетте басталмайды — «солай да жарайды»','Жарқын басталады, бірақ кейін өзіңіз бәрін бұзасыз','Табыс болса да, «сақтық үшін» тез жұмсайсыз','Табыс бар, бірақ ондай қуаныш пен жеңілдік жоқ']],
+      ['Қай сөйлем сізге жақынырақ?',['«Біздің әулетте байлар болған емес»','«Көп болса, жақындарымнан айырыламын»','«Үлкен ақша — үлкен жауапкершілік немесе күнә»','«Қаржымды ешкімге сеніп тапсыра алмаймын»']],
+      ['Ақшаңыз көбейгенде қарым-қатынастарыңызда не болады?',['Аз табатын жақындарыңыз алдында кінә сезінесіз','Достарыңызға «бөтен» болып қаламын деп қорқасыз','Айыптаудан қорқып, табысыңызды жасырасыз','Қарым-қатынастарды одан сайын қатты бақылай бастайсыз']],
+      ['Қаржылық тәуекелге қалай қарайсыз?',['Аулақ жүресіз — «тәуекел етпеген дұрыс, бізде солай қабылданған»','Кірісесіз, бірақ нәтижеге бір қадам қалғанда бұзасыз','Тәуекел бір таза емес нәрсе секілді, «тыныш» жолды таңдайсыз','Ұзақ талдайсыз және жиі сәтті сәтті жіберіп аласыз']],
+      ['Ойыңызша, ақшамен байланысты қиындықтарыңыздың астарында не жатыр?',['Байқаусызда жалғастырып келе жатқан тек бағдарламасы','Шынымен табысқа жеткенде не болады деген қорқыныш','Ішкі тыйым — «көп ақша иелену болмайды, ұят»','Ағымға сеніп, бақылауды босата алмау']]
+    ]
+  },
+  rel: {
+    label: 'Қарым-қатынас',
+    patterns: [
+      { title: 'Тасталып кету қорқынышы',
+        body: 'Қарым-қатынастағы қиындықтарыңыздың негізінде жалғыз қалу туралы терең қорқыныш жатыр. Ол нақты себеп болмаса да, жармасуға, жағымпаздануға немесе алаңдауға мәжбүр етеді.',
+        detail: 'Бұл қорқыныш әдетте ерте жаста, маңызды үлкен адаммен жақындық тұрақсыз болғанда қалыптасады. Ересек психика «мені тастамайды» дегенді дәлелдеуді іздей береді — сондықтан қарым-қатынастар жылы емес, алаңдаушылыққа толы болады.',
+        zones: ['chest','throat'],
+        bodyNote: 'Дене көбіне кеуде мен тамақта қысылады — жақындыққа қатысты алаңдаушылық тұратын жер.' },
+      { title: 'Бірігу және өзін жоғалту',
+        body: 'Қарым-қатынаста серіктесіңізге еріп, өз қалауларыңыз бен шекараларыңызбен байланысты жоғалтасыз.',
+        detail: 'Бірігу көбіне «мен» мен «біз» арасындағы шекара балалық шақтан бұлдыр болған отбасыларда қалыптасады. Мұндай үлгі жақындық арқылы қауіпсіздік елесін береді, бірақ өзіңізге сүйенуден айырады.',
+        zones: ['stomach','chest'],
+        bodyNote: 'Кернеу құрсақ пен кеудеге таралған — «мен» шекарасы жоғалатын жер.' },
+      { title: 'Сенімсіздік және қорғаныс қабырғалары',
+        body: 'Адамдарды қауіпсіз қашықтықта ұстайсыз — тыныштық үшін, бірақ жақындық та дерлік қалмайды. Мұның артында көбіне ауыр өткен тәжірибе жатады.',
+        detail: 'Қорғаныс қабырғалары — бір кездері болған ауырсынуға психиканың орынды жауабы. Мәселе — олар таңдамалы жұмыс істемейді: ауырсынудан қорғай отырып, жылуды да жібермейді.',
+        zones: ['chest','shoulders'],
+        bodyNote: 'Дене кеуде мен иықта «қалқан» ұстайды — ауырсынудан қорғаныс.' },
+      { title: 'Ата-ана сценарийін қайталау',
+        body: 'Саналы түрде мүлдем басқаны қаласаңыз да, өз қарым-қатынасыңызда ата-ана отбасыңызға таныс динамиканы байқаусызда қайта жасайтын секілдісіз.',
+        detail: 'Психика танымал жақындық үлгілерін, тіпті ауыртпалы болса да, қайталауға бейім — өйткені олар болжамды. Сценарийді көру — оны қайталамай, өз жолыңызды таңдауға жарты жол.',
+        zones: ['shoulders','lowerback'],
+        bodyNote: 'Кернеу иықтар мен бел аймағында шөгеді — дене мұралық жүкті көтеретін жер.' }
+    ],
+    questions: [
+      ['Серіктесіңіз бір күн бойы хабарласпай қойса, не сезінесіз?',['Дүрбелең — «ол менен алыстап барады»','Абдырау — «онсыз мен кіммін»','Тыныштық, бірақ ішінде «көрдіңіз бе, оларға сенуге болмайды»','Таныс сезім — «ата-анамда да дәл солай болатын»']],
+      ['Қарым-қатынас басында қалай ұстайсыз?',['Адамды жоғалтпау үшін ұнатуға тырысасыз','Серіктесіңіздің қызығушылығы мен өміріне тез еніп кетесіз','Қашықтық сақтайсыз, «беріктігін» тексересіз','Ата-ана сценарийін қайталап жатқаныңызды байқайсыз']],
+      ['Жақын қарым-қатынаста ең қатты нені қорқасыз?',['Сізді сүймей қалып, тастап кетуден','Өзіңізді және шекараларыңызды жоғалтудан','Қайтадан ауырсыну шегетінен','Бәрі анам/әкем сияқты аяқталатынынан']],
+      ['Серіктесіңізбен қақтығыс болғанда қалай жауап бересіз?',['Татуласу үшін не істеуге де дайынсыз, тек жоғалтпасаңыз болды','Ішінде келіспесеңіз де серіктесіңізбен келісесіз','Жабылып, эмоциялық жағынан алыстайсыз','Ата-анаңыздың біреуіндей әрекет еткеніңізді байқайсыз']],
+      ['Жұпта жеке шекараларыңызбен не болады?',['Қорқытпау үшін бұлдырланады','Дерлік жойылады — серіктесіңіздің қызығушылығымен өмір сүресіз','Қатаң шекара, ешкімді жақын жібермейсіз','Ата-анадағыдай бұлдыр немесе қатаң']],
+      ['Қарым-қатынаста қай ой жиі басыңызда айналады?',['«Жалғыз қалмасам болды»','«Онсыз мен толық адам емеспін»','«Сену — қауіпті»','«Біздің отбасымызда бәрі солай өмір сүрген»']],
+      ['Серіктестеріңізді қалай таңдайсыз?',['Көбіне эмоциялық қолжетімсіздерді — және барынша ұстап қалуға тырысасыз','Өміріне толықтай «еріп» кетуге болатындарды','Адамдарды қашықтықта ұстайсыз, сирек жақын жібересіз','Ата-ана біреуіне ұқсастықты байқайсыз']],
+      ['Қарым-қатынас тұрақтанғанда не болады?',['«Бұл ұзаққа бармайды ма» деген алаңдаушылық пайда болады','Біртіндеп қызығушылықтарыңыз бен қарым-қатынас шеңберіңізді жоғалтасыз','Байқаусызда өзіңіз алыстай бастайсыз','Ата-ана мінез-құлық үлгісін қайталай бастайсыз']],
+      ['Айырылысуды қалай өткересіз?',['Өте ауыр, бүкіл әлем құлағандай','Бұл адамсыз кіммін екенін ұзақ түсіне алмайсыз','Тез «жабыласыз», солай дұрыс деп өзіңізді сендіресіз','Таныс сценарийді байқайсыз — «тағы да отбасыдағыдай»']],
+      ['Серіктесіңізге жеке кеңістік керек болғанда не сезінесіз?',['Алаңдаушылық пен бұл соңының басы деген қорқыныш','Абдырау — онсыз немен айналысарыңызды білмейсіз','Жеңілдік, бірақ «мен солай білдім» деген реңкпен','Ата-ана біреуінде де осындай сезім болған']],
+      ['Қарым-қатынастағы қажеттіліктеріңізге қалай қарайсыз?',['Кетуге себеп бермеу үшін жасырасыз','Олар қандай екенін әрдайым түсіне бермейсіз — серіктеске бағдарлануға дағдыланғансыз','Өзіңізде ұстайсыз, естіледі деп сенбейсіз','Оларды атай білмейтініңізді байқайсыз — ата-ана отбасындағыдай']],
+      ['Ойыңызша, қарым-қатынастағы қиындықтарыңыздың негізінде не жатыр?',['Тасталып кету туралы терең қорқыныш','Серіктеспен бірігу және өзін жоғалту','Сенімсіздік және ішкі қорғаныс қабырғалары','Ата-ана сценарийін санасыз қайталау']]
+    ]
+  },
+  health: {
+    label: 'Денсаулық',
+    patterns: [
+      { title: 'Басылған эмоциялар',
+        body: 'Дене қазір сізге сөзбен айтуға ұзақ уақыт рұқсат бермеген нәрсені — ашу, ауырсыну, өкпені — айтып тұрған секілді. Симптом өмір сүрмеген сезімдердің дауысына айналады.',
+        detail: 'Эмоциялар жүйелі түрде басылғанда, психика басқа арна табады — дене. Бұл «психосоматика ойдан шығарылған» емес, кернеу мен өзін тежеудің нақты физиологиялық механизмі. Сезінуге және басынан өткізуге өзіңізге рұқсат беру көбіне симптомды жеңілдетудің алғашқы қадамы.',
+        zones: ['throat','chest'],
+        bodyNote: 'Дене көбіне тамақ пен кеудеде қысылады — айтылмаған сезімдер тұратын жер.' },
+      { title: 'Созылмалы шаршау және аса жауапкершілік',
+        body: 'Бір адам көтере алатыннан көп жүкті жылдар бойы өз мойныңызға аласыз, сондықтан дене бір сәтте өзіне қолжетімді жалғыз тәсілмен сигнал бере бастайды.',
+        detail: 'Аса жауапкершілік көбіне отбасында ерте «мықты» рөлін алғандарда қалыптасады. Психика шекте жұмыс істеуге дағдыланады, дұрыс себепсіз тоқтауға рұқсат бермейді — симптом сол себепке айналады.',
+        zones: ['shoulders','lowerback'],
+        bodyNote: 'Кернеу иық, мойын және бел аймағында жиналады — дене артық жүкті көтеретін жер.' },
+      { title: 'Симптомның қосалқы пайдасы',
+        body: 'Естіп жайсыз болса да, сіздің бір бөлігіңіз симптом арқылы басқа жолмен ала алмайтын нәрсені — үзіліс, қамқорлық, «жоқ» деу құқығын — алады.',
+        detail: 'Қосалқы пайда — саналы манипуляция емес, психиканың бейсаналық ымырасы: тікелей демалуды немесе назарды сұрауға «болмайтындықтан», дене айналма жол табады. Бұл байланысты түсіну ауырсыну шынайы емес дегенді білдірмейді — керісінше, дәл соны ауру делдалдығынсыз тікелей алу мүмкіндігін ашады.',
+        zones: ['stomach','hands'],
+        bodyNote: 'Дене құрсақ пен қолдарда тежеледі — жасырын қажеттілік тұратын жер.' },
+      { title: 'Тектік үлгілер',
+        body: 'Отбасыңыздың тарихында ұқсас сценарий байқалады — симптом тек гендер арқылы емес, айтылмаған тарихтар мен рөлдер арқылы да берілетіндей.',
+        detail: 'Тектік үлгілер — мистика емес, ұрпақтан ұрпаққа санасыз көзқарастар, рөлдер мен қиындықпен күресу тәсілдерінің берілу механизмі. Тек тарихымен байланысты көру көбіне кінәнің бір бөлігін алып тастап, өз тарихыңызды басқаша өткізу жолын ашады.',
+        zones: ['lowerback','chest'],
+        bodyNote: 'Кернеу бел мен кеудеге таралған — дене тек тарихын көтеретін жер.' }
+    ],
+    questions: [
+      ['Ашуланғанда көбіне не болады?',['Ашуды жұтып қоясыз, ол денеде «шөгеді»','Оны байқамайсыз — істер мен жауапкершілікпен тым бансыз','Симптом дәл бір нәрседен бас тарту керек кезде қозады','Ата-анаңыздың/әжеңіздің де дәл солай ауырғанын еске түсіресіз']],
+      ['Демалуға көбіне қалай қарайсыз?',['Дене «мәжбүр еткенде» ғана — ауру арқылы демалуға өзіңізге рұқсат етесіз','Демалыс сәнге ұқсайды, әрдайым бәріне жауап бересіз','Ауру — демалудың жалғыз заңды себебі','Отбасында демалу «қабылданбаған» болатын']],
+      ['Маңызды шешімге жақындағанда симптомға не болады?',['Қозады — дене сіз үшін «сөйлеп тұрғандай»','Артық жүктеме мен бәрін үлгермеу фонында күшейеді','Шешімді кейінге қалдыруға ыңғайлы себеп береді','Ұқсас жағдайда туысыңызда да осындай симптом болған']],
+      ['Басқалардың эмоциялары мен өтініштерімен қалай күресесіз?',['Басқаларды ренжітпеу үшін өз сезімдеріңізді тежейсіз','Көтере алатыннан көбірек аласыз — әйтпесе «ұят»','Ауырғанда айналаңыздың қамқорлығы күшейетінін байқайсыз','Анаңыз/әжеңіз де дәл солай мінез көрсеткен']],
+      ['Шаршағаныңызды сезгенде өзіңізге не айтасыз?',['«Босаңсуға уақыт жоқ, шыдау керек»','«Қиын болса да, мен әрдайым үлгеруім керек»','«Дене ауырса — ештеңе істемеуге болады»','«Біздің отбасымызда әрдайым күшпен жұмыс істеген»']],
+      ['Шын жүректен қашан ашық жылап немесе ашуланғаныңызды есіңізде ме?',['Өте ұзақ болды — эмоциялар әдетте «шығар жол таппайды»','Уақыт жоқ — әрдайым өз сезіміңізден маңыздырақ істер бар','Бұл әдетте симптом демалуға рұқсат бергенде болады','Отбасында эмоцияны ашық көрсету қабылданбаған']],
+      ['Маңызды әңгімені тежегенде денеде не болады?',['Кернеу, кесек, дене ауыруы пайда болады','Шаршауға жатқызып, тарта бересіз','Дәл сол кезде таныс симптом жиі қозады','Ата-анада да осындай дене сценарийін байқайсыз']],
+      ['Басқаларға қамқорлықта өз шекараларыңызға қалай қарайсыз?',['Дау тудырмау үшін үндемей шыдайсыз','Шекара дерлік жоқ — бәріне тірек болуыңыз «керек»','Ауру — «жоқ» деуге мүмкіндік беретін жалғыз нәрсе','Осындай өзін-өзі құрбан ету үлгісі тек ішінде болған']],
+      ['Жағдайыңыздың нашарлауының алдында көбіне не болады?',['Сезімдеріңіз туралы үндемеуге тура келген жағдай','Тым көп жүк көтерген кезең','Кейінге шегінуге себеп қажет болған сәт','Отбасы тарихындағы оқиғалармен/күндермен сәйкес келеді']],
+      ['Ауырғанда жақындарыңыз қамқорлық көрсеткенде қалай әрекет етесіз?',['Алғаш рет босаңсуға болатынын сезесіз','Қамқорлықты қабылдау ыңғайсыз, өзіңіз қамқорлық жасауға дағдылысыз','Ұзағырақ ауырудың «тиімді» болатынын байқайсыз','Балалық шақтан отбасындағы ұқсас көріністерді еске түсіресіз']],
+      ['Дене мен психиканың байланысы туралы не ойлайсыз?',['Дене айтылмаған нәрсені «ұстап тұрғанын» сеземін','Сенемін, бірақ тоқтап тыңдауға үлгермеймін','Симптомдардың нақты жағдайларда тиімді болатынын байқаймын','Тектегі аурулар тарихымен анық байланысты көремін']],
+      ['Ойыңызша, симптомыңыздың астарында не жатыр?',['Басылған, өмір сүрмеген эмоциялар','Созылмалы шаршау және аса жауапкершілік','Симптомның жасырын қосалқы пайдасы','Мұраланған тектік үлгі']]
+    ]
+  }
+};
+
+const CATEGORIES_BY_LANG = { ru: CATEGORIES_RU, kk: CATEGORIES_KK };
+
+/* ======================= STATE ======================= */
+let LANG = 'ru';
+let CATEGORIES = CATEGORIES_RU;
+let currentCat = null;
+let currentQ = 0;
+let scores = [0,0,0,0];
+let contact = { name:'', phone:'' };
+let freeform = { problemText:'', duration:'', situationText:'', emotions:[], emotionsCustom:'' };
+let steps = [];
+let stepIndex = 0;
+
+const screenLang = document.getElementById('screen-lang');
+const screenAbout = document.getElementById('screen-about');
+const screenContact = document.getElementById('screen-contact');
+const screenIntro = document.getElementById('screen-intro');
+const screenQuiz = document.getElementById('screen-quiz');
+const screenResult = document.getElementById('screen-result');
+
+/* --- language selection --- */
+function applyLang(lang){
+  const t = STRINGS[lang];
+  document.getElementById('aboutTitle').textContent = t.aboutTitle;
+  document.getElementById('aboutLede').textContent = t.aboutLede;
+  document.getElementById('aboutCardText').textContent = t.aboutCardText;
+  document.getElementById('aboutContinue').textContent = t.aboutContinueBtn;
+  document.getElementById('contactEyebrow').textContent = t.contactEyebrow;
+  document.getElementById('contactTitle').innerHTML = t.contactTitle;
+  document.getElementById('contactLede').textContent = t.contactLede;
+  document.getElementById('labelName').textContent = t.labelName;
+  document.getElementById('inpName').placeholder = t.placeholderName;
+  document.getElementById('labelPhone').textContent = t.labelPhone;
+  document.getElementById('inpPhone').placeholder = t.placeholderPhone;
+  document.getElementById('hintText').textContent = t.hintText;
+  document.getElementById('privacyText').textContent = t.privacyText;
+  document.getElementById('contactContinue').textContent = t.contactContinueBtn;
+
+  document.getElementById('introEyebrow').textContent = t.introEyebrow;
+  document.getElementById('introTitle').innerHTML = t.introTitle;
+  document.getElementById('introLede').textContent = t.introLede;
+  document.getElementById('catMoneyTitle').textContent = CATEGORIES_BY_LANG[lang].money.label;
+  document.getElementById('catRelTitle').textContent = CATEGORIES_BY_LANG[lang].rel.label;
+  document.getElementById('catHealthTitle').textContent = CATEGORIES_BY_LANG[lang].health.label;
+  document.getElementById('catMoneySub').textContent = lang==='kk' ? 'Тапшылық, табыс шегі, үлкен соманы қорқу' : 'Нехватка, потолок дохода, страх больших сумм';
+  document.getElementById('catRelSub').textContent = lang==='kk' ? 'Жалғыздық, қайталанатын сценарийлер, жақындық' : 'Одиночество, повторяющиеся сценарии, близость';
+  document.getElementById('catHealthSub').textContent = lang==='kk' ? 'Созылмалы симптомдар, дене мен психика' : 'Хронические симптомы, тело и психика';
+
+  document.getElementById('backLink').textContent = t.backLinkText;
+
+  document.getElementById('resultBadge').textContent = t.resultBadgeText;
+  document.getElementById('resultCardLabel').textContent = t.resultCardLabel;
+  document.getElementById('bodymapLabel').textContent = t.bodymapLabel;
+  document.getElementById('bodymapTitle').textContent = t.bodymapTitle;
+  document.getElementById('legendPrimary').textContent = t.legendPrimary;
+  document.getElementById('legendSecondary').textContent = t.legendSecondary;
+  document.getElementById('ctaTitle').textContent = t.ctaTitle;
+  document.getElementById('ctaP').textContent = t.ctaP;
+  document.getElementById('ctaBook').textContent = t.ctaBookBtnText;
+  document.getElementById('ctaShare').textContent = t.ctaShareBtnText;
+  document.getElementById('restartLink').textContent = t.restartLinkText;
+
+  document.documentElement.lang = lang;
+}
+
+document.querySelectorAll('.cat-card[data-lang]').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    LANG = card.dataset.lang;
+    CATEGORIES = CATEGORIES_BY_LANG[LANG];
+    applyLang(LANG);
+    screenLang.classList.add('hidden');
+    screenAbout.classList.remove('hidden');
+  });
+});
+
+document.getElementById('aboutContinue').addEventListener('click', ()=>{
+  screenAbout.classList.add('hidden');
+  screenContact.classList.remove('hidden');
+});
+
+/* --- contact step --- */
+const inpName = document.getElementById('inpName');
+const inpPhone = document.getElementById('inpPhone');
+const contactContinue = document.getElementById('contactContinue');
+
+function validateContact(){
+  const nameOk = inpName.value.trim().length >= 2;
+  const phoneOk = inpPhone.value.trim().replace(/[^\d+]/g,'').length >= 7;
+  contactContinue.disabled = !(nameOk && phoneOk);
+}
+inpName.addEventListener('input', validateContact);
+inpPhone.addEventListener('input', validateContact);
+
+contactContinue.addEventListener('click', ()=>{
+  contact.name = inpName.value.trim();
+  contact.phone = inpPhone.value.trim();
+  screenContact.classList.add('hidden');
+  screenIntro.classList.remove('hidden');
+});
+
+/* --- category cards --- */
+document.querySelectorAll('.cat-card[data-cat]').forEach(card=>{
+  card.addEventListener('click', ()=> startQuiz(card.dataset.cat));
+});
+document.getElementById('backLink').addEventListener('click', goIntro);
+document.getElementById('restartLink').addEventListener('click', goIntro);
+
+/* --- final CTA: send everything to the expert --- */
+document.getElementById('ctaBook').addEventListener('click', ()=>{
+  const t = STRINGS[LANG];
+  const title = document.getElementById('resultTitle').textContent;
+  const catLabel = CATEGORIES[currentCat].label;
+  const emotionsText = [...(freeform.emotions||[]), freeform.emotionsCustom].filter(Boolean).join(', ');
+  const text = t.shareText(
+    catLabel, title, contact.name, contact.phone,
+    freeform.problemText, freeform.duration, freeform.situationText, emotionsText
+  );
+
+  if(navigator.share){
+    navigator.share({ title:t.shareRequestTitle, text }).catch(()=>{});
+  } else {
+    navigator.clipboard?.writeText(text);
+    alert(t.alertClipboard);
+  }
+});
+document.getElementById('ctaShare').addEventListener('click', ()=>{
+  const t = STRINGS[LANG];
+  const title = document.getElementById('resultTitle').textContent;
+  const body = document.getElementById('resultBody').textContent;
+  const text = t.shareResultText(title, body);
+  if(navigator.share){
+    navigator.share({title:t.shareResultTitle, text}).catch(()=>{});
+  } else {
+    navigator.clipboard?.writeText(text);
+    alert(t.alertClipboardResult);
+  }
+});
+
+function goIntro(){
+  screenResult.classList.add('hidden');
+  screenQuiz.classList.add('hidden');
+  screenIntro.classList.remove('hidden');
+  currentCat = null; currentQ = 0; scores=[0,0,0,0];
+  freeform = { problemText:'', duration:'', situationText:'', emotions:[], emotionsCustom:'' };
+}
+
+function buildSteps(cat, catKey){
+  const t = STRINGS[LANG];
+  const list = [];
+  list.push({ type:'freetext', key:'problemText', prompt: t.problemPrompts[catKey] });
+  cat.questions.forEach(([qText, opts])=> list.push({ type:'scored', qText, opts }));
+  list.push({ type:'duration' });
+  list.push({ type:'freetext', key:'situationText', prompt: t.situationPrompt });
+  list.push({ type:'emotions' });
+  return list;
+}
+
+function startQuiz(catKey){
+  currentCat = catKey;
+  scores = [0,0,0,0];
+  freeform = { problemText:'', duration:'', situationText:'', emotions:[], emotionsCustom:'' };
+  steps = buildSteps(CATEGORIES[catKey], catKey);
+  stepIndex = 0;
+  screenIntro.classList.add('hidden');
+  screenResult.classList.add('hidden');
+  screenQuiz.classList.remove('hidden');
+  renderStep();
+}
+
+function advanceStep(){
+  if(stepIndex < steps.length - 1){
+    stepIndex++;
+    renderStep();
+  } else {
+    showResult();
+  }
+}
+
+function renderStep(){
+  const step = steps[stepIndex];
+  const t = STRINGS[LANG];
+  const cat = CATEGORIES[currentCat];
+
+  document.getElementById('progressLabel').textContent = t.progressLabel(stepIndex+1, steps.length, cat.label);
+  const pct = (stepIndex/steps.length)*100;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressLine').setAttribute('y2', pct);
+  document.getElementById('qNumber').textContent = String(stepIndex+1).padStart(2,'0');
+
+  const optList = document.getElementById('optList');
+  optList.innerHTML = '';
+
+  if(step.type === 'scored'){
+    document.getElementById('qText').textContent = step.qText;
+    step.opts.forEach((optText, idx)=>{
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.textContent = optText;
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+        btn.classList.add('selected');
+        scores[idx]++;
+        setTimeout(advanceStep, 260);
+      });
+      optList.appendChild(btn);
+    });
+
+  } else if(step.type === 'freetext'){
+    document.getElementById('qText').textContent = step.prompt;
+    const ta = document.createElement('textarea');
+    ta.className = 'textarea-field';
+    ta.placeholder = t.freetextPlaceholder;
+    ta.value = freeform[step.key] || '';
+    optList.appendChild(ta);
+    const btn = document.createElement('button');
+    btn.className = 'primary-btn';
+    btn.style.marginTop = '18px';
+    btn.textContent = t.continueBtn;
+    btn.disabled = ta.value.trim().length === 0;
+    ta.addEventListener('input', ()=>{ btn.disabled = ta.value.trim().length === 0; });
+    btn.addEventListener('click', ()=>{
+      freeform[step.key] = ta.value.trim();
+      advanceStep();
+    });
+    optList.appendChild(btn);
+
+  } else if(step.type === 'duration'){
+    document.getElementById('qText').textContent = t.durationPrompt;
+    t.durationOptions.forEach(optText=>{
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.textContent = optText;
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+        btn.classList.add('selected');
+        freeform.duration = optText;
+        setTimeout(advanceStep, 260);
+      });
+      optList.appendChild(btn);
+    });
+
+  } else if(step.type === 'emotions'){
+    document.getElementById('qText').textContent = t.emotionsPrompt;
+    const selected = new Set(freeform.emotions || []);
+
+    const tagWrap = document.createElement('div');
+    tagWrap.className = 'tag-list';
+    t.emotionsOptions.forEach(label=>{
+      const tag = document.createElement('button');
+      tag.className = 'tag' + (selected.has(label) ? ' selected' : '');
+      tag.textContent = label;
+      tag.addEventListener('click', ()=>{
+        if(selected.has(label)){ selected.delete(label); tag.classList.remove('selected'); }
+        else { selected.add(label); tag.classList.add('selected'); }
+        contBtn.disabled = selected.size === 0 && customInput.value.trim() === '';
+      });
+      tagWrap.appendChild(tag);
+    });
+    optList.appendChild(tagWrap);
+
+    const customInput = document.createElement('input');
+    customInput.type = 'text';
+    customInput.className = 'tag-custom-input';
+    customInput.placeholder = t.emotionsCustomPlaceholder;
+    customInput.value = freeform.emotionsCustom || '';
+    optList.appendChild(customInput);
+
+    const contBtn = document.createElement('button');
+    contBtn.className = 'primary-btn';
+    contBtn.style.marginTop = '18px';
+    contBtn.textContent = t.finishBtn;
+    contBtn.disabled = selected.size === 0 && customInput.value.trim() === '';
+    customInput.addEventListener('input', ()=>{
+      contBtn.disabled = selected.size === 0 && customInput.value.trim() === '';
+    });
+    contBtn.addEventListener('click', ()=>{
+      freeform.emotions = Array.from(selected);
+      freeform.emotionsCustom = customInput.value.trim();
+      advanceStep();
+    });
+    optList.appendChild(contBtn);
+  }
+}
+
+const ZONE_MAP = {
+  jaw: ['zone-jaw'],
+  throat: ['zone-throat'],
+  chest: ['zone-chest'],
+  stomach: ['zone-stomach'],
+  shoulders: ['zone-shoulders-l','zone-shoulders-r'],
+  hands: ['zone-hands-l','zone-hands-r'],
+  lowerback: ['zone-lowerback']
+};
+
+function renderBodyMap(zones){
+  document.querySelectorAll('.heat-zone').forEach(el=>{ el.style.opacity = 0; });
+  if(!zones || !zones.length) return;
+  (ZONE_MAP[zones[0]] || []).forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.style.opacity = 0.85;
+  });
+  if(zones[1]){
+    (ZONE_MAP[zones[1]] || []).forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.style.opacity = 0.4;
+    });
+  }
+}
+
+function showResult(){
+  const cat = CATEGORIES[currentCat];
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressLine').setAttribute('y2', 100);
+
+  let maxIdx = 0;
+  for(let i=1;i<scores.length;i++){ if(scores[i] > scores[maxIdx]) maxIdx = i; }
+  const pattern = cat.patterns[maxIdx];
+
+  document.getElementById('resultTitle').textContent = pattern.title;
+  document.getElementById('resultBody').textContent = pattern.body;
+  document.getElementById('resultDetail').textContent = pattern.detail;
+  document.getElementById('bodymapNote').textContent = pattern.bodyNote || '';
+  renderBodyMap(pattern.zones);
+
+  screenQuiz.classList.add('hidden');
+  screenResult.classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
