@@ -724,7 +724,7 @@ const SITE_ID = 'k-korniu-test';
 const sessionId = crypto.randomUUID();
 
 /* ======================= GOOGLE SHEETS (Apps Script Web App) ======================= */
-const GOOGLE_SHEET_WEBAPP_URL = ''; // вставить сюда ссылку вида https://script.google.com/macros/s/XXXX/exec
+const GOOGLE_SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyONcz1IEcYuOlOflVduwxpqD2ykM0-TIHFDVURVpUlaXkmJ2bZpgO7Z1lHBiK7mxUr8g/exec';
 function sendToSheet(payload){
   if(!GOOGLE_SHEET_WEBAPP_URL) return;
   fetch(GOOGLE_SHEET_WEBAPP_URL, {
