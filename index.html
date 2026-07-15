@@ -714,7 +714,13 @@ h1 em{
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+/* ======================= SUPABASE ======================= */
+const SUPABASE_URL = 'https://dgmzlgjvgkomxjvgtyga.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRnbXpsZ2p2Z2tvbXhqdmd0eWdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQxMDU5ODYsImV4cCI6MjA5OTY4MTk4Nn0.83MwBoa2jutzc8kXtPGYnYWZtdUwf7So5xCcb0ccZL0';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 /* ======================= UI STRINGS ======================= */
 const STRINGS = {
   ru: {
@@ -1171,7 +1177,7 @@ document.querySelectorAll('.cat-card[data-cat]').forEach(card=>{
 document.getElementById('backLink').addEventListener('click', goIntro);
 document.getElementById('restartLink').addEventListener('click', goIntro);
 
-/* --- final CTA: send everything to the expert via WhatsApp --- */
+/* --- final CTA: save to Supabase and send everything to the expert via WhatsApp --- */
 const WHATSAPP_LINK = 'https://wa.me/message/IM3FMV73QBLRL1';
 document.getElementById('ctaBook').addEventListener('click', ()=>{
   const t = STRINGS[LANG];
@@ -1182,6 +1188,19 @@ document.getElementById('ctaBook').addEventListener('click', ()=>{
     catLabel, title, contact.name, contact.phone,
     freeform.problemText, freeform.duration, freeform.situationText, emotionsText
   );
+
+  supabaseClient.from('submissions').insert([{
+    lang: LANG,
+    category: catLabel,
+    pattern_title: title,
+    name: contact.name,
+    phone: contact.phone,
+    problem_text: freeform.problemText,
+    duration: freeform.duration,
+    situation_text: freeform.situationText,
+    emotions: emotionsText
+  }]).then(({error})=>{ if(error) console.error('Supabase insert error:', error); });
+
   window.open(WHATSAPP_LINK + '?text=' + encodeURIComponent(text), '_blank');
 });
 
