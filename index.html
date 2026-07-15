@@ -720,6 +720,8 @@ h1 em{
 const SUPABASE_URL = 'https://dgmzlgjvgkomxjvgtyga.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRnbXpsZ2p2Z2tvbXhqdmd0eWdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQxMDU5ODYsImV4cCI6MjA5OTY4MTk4Nn0.83MwBoa2jutzc8kXtPGYnYWZtdUwf7So5xCcb0ccZL0';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SITE_ID = 'k-korniu-test';
+const sessionId = crypto.randomUUID();
 
 /* ======================= UI STRINGS ======================= */
 const STRINGS = {
@@ -1081,6 +1083,7 @@ let currentQ = 0;
 let scores = [0,0,0,0];
 let contact = { name:'', phone:'' };
 let freeform = { problemText:'', duration:'', situationText:'', emotions:[], emotionsCustom:'' };
+let answersLog = [];
 let steps = [];
 let stepIndex = 0;
 
@@ -1166,6 +1169,12 @@ inpPhone.addEventListener('input', validateContact);
 contactContinue.addEventListener('click', ()=>{
   contact.name = inpName.value.trim();
   contact.phone = inpPhone.value.trim();
+
+  supabaseClient.from('submissions').insert([{
+    site: SITE_ID, session_id: sessionId, stage: 'contact',
+    lang: LANG, name: contact.name, phone: contact.phone
+  }]).then(({error})=>{ if(error) console.error('Supabase insert error (contact):', error); });
+
   screenContact.classList.add('hidden');
   screenIntro.classList.remove('hidden');
 });
@@ -1177,7 +1186,7 @@ document.querySelectorAll('.cat-card[data-cat]').forEach(card=>{
 document.getElementById('backLink').addEventListener('click', goIntro);
 document.getElementById('restartLink').addEventListener('click', goIntro);
 
-/* --- final CTA: save to Supabase and send everything to the expert via WhatsApp --- */
+/* --- final CTA: send everything to the expert via WhatsApp (data already saved in showResult) --- */
 const WHATSAPP_LINK = 'https://wa.me/message/IM3FMV73QBLRL1';
 document.getElementById('ctaBook').addEventListener('click', ()=>{
   const t = STRINGS[LANG];
@@ -1188,19 +1197,6 @@ document.getElementById('ctaBook').addEventListener('click', ()=>{
     catLabel, title, contact.name, contact.phone,
     freeform.problemText, freeform.duration, freeform.situationText, emotionsText
   );
-
-  supabaseClient.from('submissions').insert([{
-    lang: LANG,
-    category: catLabel,
-    pattern_title: title,
-    name: contact.name,
-    phone: contact.phone,
-    problem_text: freeform.problemText,
-    duration: freeform.duration,
-    situation_text: freeform.situationText,
-    emotions: emotionsText
-  }]).then(({error})=>{ if(error) console.error('Supabase insert error:', error); });
-
   window.open(WHATSAPP_LINK + '?text=' + encodeURIComponent(text), '_blank');
 });
 
@@ -1210,6 +1206,7 @@ function goIntro(){
   screenIntro.classList.remove('hidden');
   currentCat = null; currentQ = 0; scores=[0,0,0,0];
   freeform = { problemText:'', duration:'', situationText:'', emotions:[], emotionsCustom:'' };
+  answersLog = [];
 }
 
 function buildSteps(cat, catKey){
@@ -1227,6 +1224,7 @@ function startQuiz(catKey){
   currentCat = catKey;
   scores = [0,0,0,0];
   freeform = { problemText:'', duration:'', situationText:'', emotions:[], emotionsCustom:'' };
+  answersLog = [];
   steps = buildSteps(CATEGORIES[catKey], catKey);
   stepIndex = 0;
   screenIntro.classList.add('hidden');
@@ -1268,6 +1266,7 @@ function renderStep(){
         document.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
         btn.classList.add('selected');
         scores[idx]++;
+        answersLog.push({ q: step.qText, a: optText });
         setTimeout(advanceStep, 260);
       });
       optList.appendChild(btn);
@@ -1389,6 +1388,16 @@ function showResult(){
   document.getElementById('resultDetail').textContent = pattern.detail;
   document.getElementById('bodymapNote').textContent = pattern.bodyNote || '';
   renderBodyMap(pattern.zones);
+
+  const emotionsText = [...(freeform.emotions||[]), freeform.emotionsCustom].filter(Boolean).join(', ');
+  supabaseClient.from('submissions').insert([{
+    site: SITE_ID, session_id: sessionId, stage: 'completed',
+    lang: LANG, category: cat.label, pattern_title: pattern.title,
+    name: contact.name, phone: contact.phone,
+    problem_text: freeform.problemText, duration: freeform.duration,
+    situation_text: freeform.situationText, emotions: emotionsText,
+    answers: answersLog
+  }]).then(({error})=>{ if(error) console.error('Supabase insert error (completed):', error); });
 
   screenQuiz.classList.add('hidden');
   screenResult.classList.remove('hidden');
