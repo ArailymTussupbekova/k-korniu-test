@@ -723,6 +723,18 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_
 const SITE_ID = 'k-korniu-test';
 const sessionId = crypto.randomUUID();
 
+/* ======================= GOOGLE SHEETS (Apps Script Web App) ======================= */
+const GOOGLE_SHEET_WEBAPP_URL = ''; // вставить сюда ссылку вида https://script.google.com/macros/s/XXXX/exec
+function sendToSheet(payload){
+  if(!GOOGLE_SHEET_WEBAPP_URL) return;
+  fetch(GOOGLE_SHEET_WEBAPP_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'text/plain'},
+    body: JSON.stringify(payload)
+  }).catch(()=>{});
+}
+
 /* ======================= UI STRINGS ======================= */
 const STRINGS = {
   ru: {
@@ -1170,10 +1182,12 @@ contactContinue.addEventListener('click', ()=>{
   contact.name = inpName.value.trim();
   contact.phone = inpPhone.value.trim();
 
-  supabaseClient.from('submissions').insert([{
+  const contactPayload = {
     site: SITE_ID, session_id: sessionId, stage: 'contact',
     lang: LANG, name: contact.name, phone: contact.phone
-  }]).then(({error})=>{ if(error) console.error('Supabase insert error (contact):', error); });
+  };
+  supabaseClient.from('submissions').insert([contactPayload]).then(({error})=>{ if(error) console.error('Supabase insert error (contact):', error); });
+  sendToSheet(contactPayload);
 
   screenContact.classList.add('hidden');
   screenIntro.classList.remove('hidden');
@@ -1390,14 +1404,16 @@ function showResult(){
   renderBodyMap(pattern.zones);
 
   const emotionsText = [...(freeform.emotions||[]), freeform.emotionsCustom].filter(Boolean).join(', ');
-  supabaseClient.from('submissions').insert([{
+  const completedPayload = {
     site: SITE_ID, session_id: sessionId, stage: 'completed',
     lang: LANG, category: cat.label, pattern_title: pattern.title,
     name: contact.name, phone: contact.phone,
     problem_text: freeform.problemText, duration: freeform.duration,
     situation_text: freeform.situationText, emotions: emotionsText,
     answers: answersLog
-  }]).then(({error})=>{ if(error) console.error('Supabase insert error (completed):', error); });
+  };
+  supabaseClient.from('submissions').insert([completedPayload]).then(({error})=>{ if(error) console.error('Supabase insert error (completed):', error); });
+  sendToSheet(completedPayload);
 
   screenQuiz.classList.add('hidden');
   screenResult.classList.remove('hidden');

@@ -49,3 +49,26 @@ alter table public.submissions
 -- (например 'site-2'), чтобы отличать заявки по колонке site.
 -- Таблицу и SQL выше повторно создавать не нужно.
 -- ==========================================================================
+
+
+-- ==========================================================================
+-- КАБИНЕТ ПРОСМОТРА (admin/index.html): выполните это в SQL Editor, чтобы
+-- залогиненные пользователи могли читать и удалять заявки.
+-- ==========================================================================
+
+create policy "Allow authenticated read"
+  on public.submissions
+  for select
+  to authenticated
+  using (true);
+
+create policy "Allow authenticated delete"
+  on public.submissions
+  for delete
+  to authenticated
+  using (true);
+
+-- Затем создайте свой логин для входа в кабинет:
+-- Supabase Dashboard -> Authentication -> Users -> Add user
+-- (укажите свой email и придумайте пароль — их вы будете вводить на странице
+-- admin/index.html; мне их сообщать не нужно, вход происходит напрямую в Supabase).
